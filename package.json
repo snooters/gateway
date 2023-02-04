@@ -1,0 +1,28 @@
+{
+  "name": "gateway",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "express": "~4.16.1",
+    "fastest-validator": "^1.16.0",
+    "fs": "^0.0.1-security",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.20",
+    "sequelize": "^6.28.0",
+    "sequelize-cli": "^6.6.0",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "pg-promise": "^10.11.1",    
+    "sync-request": "^6.1.0",
+    "sync-sql": "^1.0.2"
+  }
+}
