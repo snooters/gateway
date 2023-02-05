@@ -13,6 +13,11 @@ var usersRouter = require('./routes/users');
 var balancedinqueryRouter = require('./routes/Inquiry');
 var PPOBRouter = require('./routes/PPOB');
 var tariktunaiRouter = require('./routes/tariktunai');
+var tokenrouter = require('./routes/token');
+// var releasetartunrouter = require('./routes/releasetartun');
+var transferoutrouter = require('./routes/transferout');
+var transferinrouter = require('./routes/transferin');
+var pindahbukurouter = require('./routes/pindahbuku');
 
 const { sequelize } = require("./connection");
 
@@ -40,6 +45,11 @@ app.use('/users', usersRouter);
 app.use('/inquiry', balancedinqueryRouter);
 app.use('/ppob', PPOBRouter);
 app.use('/tariktunai', tariktunaiRouter);
+app.use('/token', tokenrouter);
+// app.use('/releasetartun', releasetartunrouter);
+app.use('/transferout', transferoutrouter);
+app.use('/transferin', transferinrouter);
+app.use('/pindahbuku', pindahbukurouter);
 
 app.get("/", (req, res) => {
   res.send("gateway-api");

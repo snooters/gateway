@@ -19,7 +19,8 @@ const {
     Sign_Off,
     Inquiry_Balance,
     invelid_transaction,
-    Successful
+    Successful,
+    rek_notauth
 } = process.env;
 
 router.post('/', async (req, res) => {
@@ -54,9 +55,9 @@ router.post('/', async (req, res) => {
    // let { no_rek, trx_code, rek_pok, rek_fee, nominal_pok, nominal_fee, terminal_id, rrn, keterangan } = req.body;
    
    rek_pok = data.gl_rek_cr_1;
-   rek_fee = data.gl_rek_cr_2
-   nominal_pok = data.gl_amount_cr_1
-   nominal_fee = data.gl_amount_cr_2
+   rek_fee = data.gl_rek_cr_2;
+   nominal_pok = data.gl_amount_cr_1;
+   nominal_fee = data.gl_amount_cr_2;
    terminal_id =""
    keterangan =product_name ;
     // cek status closing
@@ -95,7 +96,7 @@ router.post('/', async (req, res) => {
         // validasi status rekening
         if (request[0]["stsrec"] == null) {
             return res.status(400).send({
-                code: rek_tutup,
+                code: rek_tidakada,
                 status: "GAGAL",
                 message: "Rekening Tidak Ditemukan",
                 rrn: rrn,
@@ -103,7 +104,7 @@ router.post('/', async (req, res) => {
             });
         } else if (request[0]["stsrec"] == "N") {
             return res.status(400).send({
-                code: rek_tutup,
+                code: rek_notauth,
                 status: "GAGAL",
                 message: "Rekening Tidak Aktif",
                 rrn: rrn,
@@ -127,7 +128,7 @@ router.post('/', async (req, res) => {
             });
         } else if (request[0]["stsrec"] == "D") {
             return res.status(400).send({
-                code: rek_tutup,
+                code: rek_notauth,
                 status: "GAGAL",
                 message: "Rekening Dihapus",
                 rrn: rrn,
@@ -345,9 +346,9 @@ router.post('/', async (req, res) => {
 
                 // update transaksi fee ke di tabungan OY
                 await db.sequelize.query(
-                    "update m_tabunganc set saldoakhir = saldoakhir + ?, trnke = trnke +1,mutasicr =  mutasicr +? where noacc=?",
+                    "update m_tabunganc set saldoakhir = saldoakhir + ?, trnke = trnke + 1, mutasicr =  mutasicr + ? where noacc= ?",
                     {
-                        replacements: [nominal_fee,nominal_fee, rek_fee]
+                        replacements: [nominal_fee, nominal_fee, rek_fee]
                     }
                 );
 
