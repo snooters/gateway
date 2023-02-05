@@ -20,11 +20,17 @@ const {
     invelid_transaction,
     Successful,
     Req_Token_Tarik_Tunai,
-    Release_Tarik_Tunai
+    Release_Tarik_Tunai,
+    Transfer_Out,
+    Transfer_In
 } = process.env;
 
 router.post('/', async (req, res) => {
     const schema = {
+
+        bank_tujuan: "string",
+        rek_tujuan: "string",
+        nama_tujuan: "string",
         no_hp: "string",
         bpr_id: "string",
         no_rek: "string",
@@ -52,7 +58,8 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    let { no_hp, bpr_id, no_rek, trx_code, trx_type, amount, trans_fee, token, keterangan, terminal_id, lokasi, tgl_trans, tgl_transmis, rrn, data } = req.body
+    let { bank_tujuan, rek_tujuan, nama_tujuan, no_hp, bpr_id, no_rek, trx_code, trx_type, amount, trans_fee, token, keterangan, terminal_id, lokasi, tgl_trans, tgl_transmis, rrn, data } = req.body
+
 
     //    set tanggal transaksi
     let tgltrn = tgl_trans.substr(0, 8);
@@ -86,7 +93,7 @@ router.post('/', async (req, res) => {
 
     try {
         let request = await db.sequelize.query(
-            "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec from m_tabunganc where noacc =?",
+            "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec from m_tabunganc where noacc = ?",
             {
                 replacements: [no_rek],
                 type: db.sequelize.QueryTypes.SELECT,
@@ -102,7 +109,7 @@ router.post('/', async (req, res) => {
                 console.log("message: Rekening Tidak Ditemukan ");
 
                 return res.status(400).send({
-                    code: rek_tutup,
+                    code: rek_tidakada,
                     status: "GAGAL",
                     message: "Rekening Tidak Ditemukan",
                     rrn: rrn,
@@ -168,7 +175,7 @@ router.post('/', async (req, res) => {
 
             } else if (request[0]["stsrec"] == "A") {
 
-                if (trx_code == Req_Token_Tarik_Tunai) {
+                if (trx_code == Transfer_In) {
                     // cek saldo cukup atau tidak
                     if (request[0]["saldoeff"] < amount + trans_fee) {
                         return res.status(400).send({
@@ -179,17 +186,33 @@ router.post('/', async (req, res) => {
                             data: null
                         });
                     } else {
+
                         //  mengurangi rekening nasabah pokok
                         let debet = await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir = saldoakhir - ? , mutasidr = mutasidr + ?,trnke=trnke + 1 where noacc =?",
+                            "update m_tabunganc set saldoakhir = saldoakhir + ? , mutasidr = mutasidr + ?,trnke=trnke + 1 where noacc = ?",
                             {
                                 replacements: [amount, amount, no_rek]
                             }
                         );
 
+                        return res.status(200).send(
+                            {
+                                code: Successful,
+                                status: "SUKSES",
+                                message: "Transfer In Sukses",
+                                rrn: rrn,
+                                data: {
+                                    no_rek: no_rek,
+                                    nama: request[0]["fnama"],
+                                    trx_type: trx_type,
+                                }
+
+
+                            });
+
                         // ngambil transaksi ke dr
                         let trnkedr = await db.sequelize.query(
-                            "select * from m_tabunganc where noacc =?",
+                            "select * from m_tabunganc where noacc = ?",
                             {
                                 replacements: [no_rek]
                             }

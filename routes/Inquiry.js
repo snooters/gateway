@@ -17,7 +17,8 @@ const {
     Sign_Off,
     Inquiry_Balance,
     invelid_transaction,
-    Successful} = process.env;
+    Successful,
+    rek_notauth} = process.env;
 
 router.post('/', async (req, res) => {
     const schema = {
@@ -81,7 +82,7 @@ router.post('/', async (req, res) => {
                 console.log("message: Rekening Tidak Ditemukan ");
 
                 return res.status(400).send({
-                    code: rek_tutup,
+                    code: rek_tidakada,
                     status: "GAGAL",
                     message: "Rekening Tidak Ditemukan",
                     rrn:rrn,
@@ -95,7 +96,7 @@ router.post('/', async (req, res) => {
                 console.log("message: Rekening Tidak Aktif");
 
                 return res.status(400).send({
-                    code: rek_tutup,
+                    code: rek_notauth,
                     status: "GAGAL",
                     message: "Rekening Tidak Aktif",
                     rrn:rrn,
@@ -137,7 +138,7 @@ router.post('/', async (req, res) => {
                 console.log("message: Rekening Dihapus");
 
                 return res.status(400).send({
-                    code: rek_tutup,
+                    code: rek_notauth,
                     status: "GAGAL",
                     message: "Rekening Dihapus",
                     rrn:rrn,
@@ -195,7 +196,7 @@ router.post('/', async (req, res) => {
                     console.log("message: Trx Code Tidak Ditemukan");
 
                     return res.status(400).send({
-                        code: invelid_transaction,
+                        code: rek_tidakada,
                         status: "GAGAL",
                         message: "Trx Code Tidak Ditemukan",
                         rrn:rrn,

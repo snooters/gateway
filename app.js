@@ -14,6 +14,11 @@ var usersRouter = require('./routes/users');
 var balancedinqueryRouter = require('./routes/Inquiry');
 var PPOBRouter = require('./routes/PPOB');
 var tariktunaiRouter = require('./routes/tariktunai');
+var tokenrouter = require('./routes/token');
+// var releasetartunrouter = require('./routes/releasetartun');
+var transferoutrouter = require('./routes/transferout');
+var transferinrouter = require('./routes/transferin');
+var pindahbukurouter = require('./routes/pindahbuku');
 
 var app = express();
 
@@ -29,6 +34,11 @@ app.use('/users', usersRouter);
 app.use('/Inquiry', balancedinqueryRouter);
 app.use('/ppob', PPOBRouter);
 app.use('/tariktunai', tariktunaiRouter);
+app.use('/token', tokenrouter);
+// app.use('/releasetartun', releasetartunrouter);
+app.use('/transferout', transferoutrouter);
+app.use('/transferin', transferinrouter);
+app.use('/pindahbuku', pindahbukurouter);
 
 // console.log(`API Run In  at http://localhost:${PORT_API}`);
 
