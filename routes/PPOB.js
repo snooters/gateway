@@ -13,20 +13,30 @@ const {
     USER_ID,
     KODE_TRN_PPOB,
     BATCH,
-    KODE_TRN_BUKU
+    KODE_TRN_BUKU,
+    PPOB,
+    Sign_In,
+    Sign_Off,
+    Inquiry_Balance,
+    invelid_transaction,
+    Successful
 } = process.env;
 
 router.post('/', async (req, res) => {
-    const schema = {
-        no_rek: 'string',
-        trx_code: 'string',
-        rek_pok: 'string',
-        rek_fee: 'string',
-        nominal_pok: 'number',
-        nominal_fee: 'number',
-        terminal_id: 'string',
-        keterangan: 'string',
-        rrn: 'string'
+    const schema = {        
+            no_hp: "string",
+            bpr_id: "string",
+            no_rek: "string",
+            product_name: "string",
+            token_mpin: "string",
+            trx_code: "string",
+            trx_type: "string",
+            amount: "number",
+            trans_fee: "number",
+            tgl_trans: "string",
+            tgl_transmis: "string",
+            rrn: "string"    
+          
     }
 
     const validate = v.validate(req.body, schema);
@@ -40,8 +50,15 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    let { no_rek, trx_code, rek_pok, rek_fee, nominal_pok, nominal_fee, terminal_id, rrn, keterangan } = req.body;
-
+    let {no_hp,bpr_id,no_rek,product_name,token_mpin,trx_code,trx_type,amount,trans_fee,tgl_trans,tgl_transmis,rrn,data} = req.body;
+   // let { no_rek, trx_code, rek_pok, rek_fee, nominal_pok, nominal_fee, terminal_id, rrn, keterangan } = req.body;
+   
+   rek_pok = data.gl_rek_cr_1;
+   rek_fee = data.gl_rek_cr_2
+   nominal_pok = data.gl_amount_cr_1
+   nominal_fee = data.gl_amount_cr_2
+   terminal_id =""
+   keterangan =product_name ;
     // cek status closing
     let stsclose = await db.sequelize.query(
         "select stsclose from TOFCLOSE where stsclose='C'",
@@ -57,30 +74,14 @@ router.post('/', async (req, res) => {
             }
         )
         return res.status(403).send({
-            code: "403",
+            code: Sign_Off,
             status: "GAGAL",
             message: "Sedang Melakukan Closing",
             rrn: rrn,
             data: null
         });
     }
-    // // get batch terminal ATM
-    // let terminalbatch = await db.sequelize.query(
-    //     "select batch from terminal_atm where terminalid = ?",
-    //     {
-    //         replacements: [terminal_id]
-    //     }
-    // );
-    // if (!terminalbatch.length) {
-    //     return res.status(400).send({
-    //         code: 400,
-    //         status: "GAGAL",
-    //         message: "ATM Tidak Terdaftar",
-    //         rrn: rrn,
-    //         data: null
-    //     });
-    // }
-
+ 
     try {
         // cari data tabungan nasabah
         request = await db.sequelize.query(
@@ -136,15 +137,16 @@ router.post('/', async (req, res) => {
 
             if (request[0]["saldoeff"] < nominal_pok + nominal_fee) {
                 return res.status(404).send({
-                    code: 404,
+                    code: saldo_kurang,
                     status: "GAGAL",
                     message: "Saldo Tabungan Tidak Cukup",
                     rrn: rrn,
                     data: null
                 });
             }
+            // cek kode transaksi
             // cari rekpok POKOK OY
-            if (trx_code == '1001') {
+            if (trx_code == PPOB) {
                 gl_pok = await db.sequelize.query(
                     "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec,  (select sbbprinc from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as sbbtab,trnke + 1 as trnke from m_tabunganc  where noacc =?",
                     {
@@ -155,7 +157,7 @@ router.post('/', async (req, res) => {
 
                 if (!gl_pok.length) {
                     return res.status(404).send({
-                        code: 404,
+                        code: rek_tidakada,
                         status: "GAGAL",
                         message: "Rekening Pok Tidak Ditemukan",
                         rrn: rrn,
@@ -175,7 +177,7 @@ router.post('/', async (req, res) => {
 
                 if (!gl_fee.length) {
                     return res.status(404).send({
-                        code: 404,
+                        code: rek_tidakada,
                         status: "GAGAL",
                         message: "Rekening Fee Tidak Ditemukan",
                         rrn: rrn,
@@ -187,15 +189,15 @@ router.post('/', async (req, res) => {
 
                 //PROSES update tabungan nasabah PPOB
                 [result, metadata] = await db.sequelize.query(
-                    "update m_tabunganc set saldoakhir= saldoakhir - ?, trnke = trnke + 1 where noacc=?",
+                    "update m_tabunganc set saldoakhir= saldoakhir - ?, trnke = trnke + 1,mutasidr =  mutasidr + ? where noacc=?",
                     {
-                        replacements: [nominal_pok, no_rek],
+                        replacements: [nominal_pok,nominal_pok, no_rek],
                     }
                 );
 
                 if (!metadata) {
                     return res.status(400).send({
-                        code: 404,
+                        code: invelid_transaction,
                         status: "GAGAL",
                         message: "Gagal Mengurangi Saldo Tabungan",
                         rrn: rrn,
@@ -206,15 +208,15 @@ router.post('/', async (req, res) => {
                 // proses update tabungan rek pok OY
 
                 [result, metadata] = await db.sequelize.query(
-                    "update m_tabunganc set saldoakhir= saldoakhir + ?, trnke = trnke + 1 where noacc=?",
+                    "update m_tabunganc set saldoakhir= saldoakhir + ?, trnke = trnke + 1,mutasicr =  mutasicr + ? where noacc=?",
                     {
-                        replacements: [nominal_pok, rek_pok],
+                        replacements: [nominal_pok,nominal_pok, rek_pok],
                     }
                 );
 
                 if (!metadata) {
                     return res.status(400).send({
-                        code: 404,
+                        code: invelid_transaction,
                         status: "GAGAL",
                         message: "Gagal Menambah Saldo Tabungan Pok",
                         rrn: rrn,
@@ -248,7 +250,8 @@ router.post('/', async (req, res) => {
                 let kdloc = no_rek.substr(5, 2);
                 let sbbperalihan_dr = kdbank + kdcab + kdloc + "10" + request[0]["sbbtab"];
                 let sbbperalihan_cr = rek_pok.substr(0, 3) + rek_pok.substr(3, 2) + rek_pok.substr(5, 2) + "10" + gl_pok[0]["sbbtab"];
-                let trnke = request[0]["trnke"];
+                let trnke = request[0]["trnke"]; 
+                noreff = BATCH + notrn 
 
                 // update nomor transaksi
                 await db.sequelize.query(
@@ -334,17 +337,17 @@ router.post('/', async (req, res) => {
 
                 // update transaksi fee ke di tabungan nasabah
                 await db.sequelize.query(
-                    "update m_tabunganc set saldoakhir = saldoakhir - ?, trnke = trnke +1 where noacc=?",
+                    "update m_tabunganc set saldoakhir = saldoakhir - ?, trnke = trnke +1,mutasidr =  mutasidr - ? where noacc=?",
                     {
-                        replacements: [nominal_fee, no_rek]
+                        replacements: [nominal_fee,nominal_fee, no_rek]
                     }
                 );
 
                 // update transaksi fee ke di tabungan OY
                 await db.sequelize.query(
-                    "update m_tabunganc set saldoakhir = saldoakhir + ?, trnke = trnke +1 where noacc=?",
+                    "update m_tabunganc set saldoakhir = saldoakhir + ?, trnke = trnke +1,mutasicr =  mutasicr +? where noacc=?",
                     {
-                        replacements: [nominal_fee, rek_fee]
+                        replacements: [nominal_fee,nominal_fee, rek_fee]
                     }
                 );
 
@@ -371,7 +374,7 @@ router.post('/', async (req, res) => {
                 notrn = notransaksi[0]["notrn"];
                 sbbperalihan_cr = kdbank + kdcab + kdloc + "10" + trnkefee[0]["sbbtab"];
                 trnke = tanspcfeeke;
-
+                noreff = noreff + notrn + rrn
                 // update nomor transaksi
                 await db.sequelize.query(
                     "update nomaster set nomor = ? where batch=?",
@@ -418,6 +421,15 @@ router.post('/', async (req, res) => {
                     }
 
                 );
+                let trnkedeb1 = await db.sequelize.query(
+                    "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec,  (select sbbprinc from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as sbbtab,trnke  from m_tabunganc  where noacc =?",
+                    {
+                        replacements: [no_rek],
+                        type: db.sequelize.QueryTypes.SELECT,
+                    }
+                )
+                let trnkedeb = trnkedeb1[0]["trnke"];
+
                 // insert transpc fee nasabah
                 [result, metadata] = await db.sequelize.query(
                     "insert into transpc (" +
@@ -425,7 +437,7 @@ router.post('/', async (req, res) => {
                     "values (" +
                     "?,         ?,      ?,      ?,      ?,  ?,          ?,          ?,          ?)",
                     {
-                        replacements: [tgltrn, BATCH, notrn, no_rek, "D", nominal_fee, "N", KODE_TRN_BUKU, trnke]
+                        replacements: [tgltrn, BATCH, notrn, no_rek, "D", nominal_fee, "N", KODE_TRN_BUKU, trnkedeb]
                     }
                 );
 
@@ -442,20 +454,28 @@ router.post('/', async (req, res) => {
 
 
                 return res.status(200).send({
-                    code: "200",
+                    code: Successful,
                     status: "SUKSES",
                     message: "Transaksi PPOB :" + keterangan + "SUKSES",
                     rrn: rrn,
                     data: {
-                        "Norek": no_rek,
+                        "No_rek": no_rek,
                         "Nama": request[0]["fnama"],
-                        "Nominal": nominal_pok + nominal_fee
+                        "Nominal": nominal_pok + nominal_fee,
+                        "noreff": noreff,
+                        "gl_rek_cr_1":rek_pok,
+                        "gl_rek_cr_1_nama" :gl_pok[0]["fnama"],
+                        "gl_amount_cr_1": nominal_pok,
+                        "gl_rek_cr_2":rek_fee,
+                        "gl_rek_cr_2_nama": gl_fee[0]["fnama"],
+                        "gl_amount_cr_2":nominal_fee
+                        
                     }
                 });
 
             } else {
                 return res.status(400).send({
-                    code: rek_tutup,
+                    code: rek_tidakada,
                     status: "GAGAL",
                     message: "Rekening Tidak Ditemukan",
                     rrn: rrn,
@@ -466,9 +486,9 @@ router.post('/', async (req, res) => {
         } else {
             // jika rekening tidak ditemukan 
             return res.status(400).send({
-                code: rek_tutup,
+                code: invelid_transaction,
                 status: "GAGAL",
-                message: "Rekening Tidak Ditemukan",
+                message: "Kode Transaksi Tidak ditemukan",
                 rrn: rrn,
                 data: null
             });
@@ -476,7 +496,7 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.log('Error Inquiry Account PPOB', error);
         return res.status(400).send({
-            code: "404",
+            code: rek_tidakada,
             status: "GAGAL",
             message: "Rekening Tidak Ditemukan ",
             rrn: rrn,

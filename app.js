@@ -10,9 +10,10 @@ const {
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var inqueryacctRouter = require('./routes/inqueryacct');
-var balancedinqueryRouter = require('./routes/BalanceInquiry');
+// var inqueryacctRouter = require('./routes/inqueryacct');
+var balancedinqueryRouter = require('./routes/Inquiry');
 var PPOBRouter = require('./routes/PPOB');
+var tariktunaiRouter = require('./routes/tariktunai');
 
 var app = express();
 
@@ -24,11 +25,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/inqueryacct', inqueryacctRouter);
-app.use('/BalanceInquiry', balancedinqueryRouter);
+// app.use('/inqueryacct', inqueryacctRouter);
+app.use('/Inquiry', balancedinqueryRouter);
 app.use('/ppob', PPOBRouter);
+app.use('/tariktunai', tariktunaiRouter);
 
-console.log(`WELCOME TO BPR ANGGA API at http://localhost:${PORT_API}`);
+// console.log(`API Run In  at http://localhost:${PORT_API}`);
 
 
 module.exports = app;
