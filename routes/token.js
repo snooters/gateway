@@ -87,7 +87,7 @@ router.post('/', async (req, res) => {
 
     try {
         let request = await db.sequelize.query(
-            "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec from m_tabunganc where noacc = ?",
+            "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec,stsblok from m_tabunganc where noacc = ?",
             {
                 replacements: [no_rek],
                 type: db.sequelize.QueryTypes.SELECT,
