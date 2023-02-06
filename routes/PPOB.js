@@ -136,6 +136,17 @@ router.post('/', async (req, res) => {
             });
         } else if (request[0]["stsrec"] == "A") {
 
+              // cek status blokir
+              if(request[0]["stsblok"] == "R"){
+                return res.status(400).send({
+                    code: rek_blokir,
+                    status: "GAGAL",
+                    message: "Rekening Diblokir",
+                    rrn:rrn,
+                    data: null
+                });
+               };
+
             if (request[0]["saldoeff"] < nominal_pok + nominal_fee) {
                 return res.status(404).send({
                     code: saldo_kurang,
