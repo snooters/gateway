@@ -17,11 +17,12 @@
     "fs": "^0.0.1-security",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.20",
-    "sequelize": "^6.28.0",
-    "sequelize-cli": "^6.6.0",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "pg-promise": "^10.11.1",    
+    "pg-promise": "^10.11.1",
+    "rs": "^0.0.1",
+    "sequelize": "^6.28.0",
+    "sequelize-cli": "^6.6.0",
     "sync-request": "^6.1.0",
     "sync-sql": "^1.0.2"
   }
