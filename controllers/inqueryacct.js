@@ -18,9 +18,11 @@ async function getnamaacc(isi) {
         hasil = {
             no_hp:no_hp,
             no_rek: no_rek,
-            nama: request[0]["fnama"],
-            stsrec: request[0]["stsrec"],
-            stsblok: request[0]["stsblok"],
+            nama: "Not Found",
+            stsrec: "Not Found",
+            stsblok: "Not Found",
+            saldoakhir: "Not Found",
+            saldoeff: "Not Found",
         };
         return hasil
 
