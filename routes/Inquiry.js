@@ -46,7 +46,6 @@ router.post('/', async (req, res) => {
         let stsblok = hasil.stsblok
         let no_rek = hasil.no_rek
         let nama_rek = hasil.nama
-        let no_hp = hasil.no_hp
 
         // jika status rekening belum di otorisasi
         if (stsrec == "N") {
@@ -100,7 +99,6 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         rrn: rrn,
-                        no_hp: no_hp,
                         no_rek: no_rek,
                         nama_rek: nama_rek
                     }
@@ -122,7 +120,6 @@ router.post('/', async (req, res) => {
         var value = []
         let jsonstring
         for (i in data) {
-            let no_hp = data[i].no_hp
             let no_rek = data[i].no_rek
             let hasil = await getbalance(no_rek)
             let stsrec = hasil.stsrec
@@ -131,7 +128,6 @@ router.post('/', async (req, res) => {
             let saldoakhir = hasil.saldoakhir
             let saldoeff = hasil.saldoeff
             value.push({
-                no_hp: no_hp,
                 no_rek: no_rek,
                 nama_rek: nama_rek,
                 saldoakhir: saldoakhir,
