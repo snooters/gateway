@@ -158,9 +158,9 @@ router.post('/', async (req, res) => {
     } else {
         // jika transaksi code tidak ada
         return res.status(200).send({
-            code: rek_tidakada,
+            code: invelid_transaction,
             status: "GAGAL",
-            message: trx_code + " Tidak Terdaftar",
+            message:"TRX_CODE " + trx_code + " Tidak Terdaftar",
             rrn: rrn,
             data: null
         });
