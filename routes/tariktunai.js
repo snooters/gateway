@@ -4,6 +4,7 @@ var router = express.Router();
 const Validator = require('fastest-validator');
 const db = require("../connection/index");
 const { getbalance } = require('../controllers/inqueryacct');
+const { getnamaacc } = require('../controllers/inqueryacct');
 const { cekclosing } = require('../controllers/cek_status_closing');
 const { getnotrn } = require('../controllers/getnotrn');
 const { gettanggal } = require('../controllers/get_tgltrn');
@@ -130,24 +131,24 @@ router.post('/', async (req, res) => {
                     )
                 } catch (e) {
                 }
-
-                try {
-                    await db.sequelize.query(
-                        "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
-                        {
-                            replacements: [amount, amount, gl_rek_cr_1]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == 2) {
+                    try {
+                        await db.sequelize.query(
+                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
+                            {
+                                replacements: [amount, amount, gl_rek_cr_1]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
-
                 // insert transaksi
                 tgltrn = await gettanggal()
                 trnuser = USER_ID
                 kodetrn = "2201"
                 dracc = gl_rek_db_1
                 drmodul = gl_jns_db_1
-                cracc = gl_rek_cr_1
+                let cracc = gl_rek_cr_1
                 crmodul = gl_jns_cr_1
                 dc = ""
                 nominal = amount
@@ -183,14 +184,29 @@ router.post('/', async (req, res) => {
                 depfrom = ""
                 depto = ""
                 dokumen = rrn + tgltrn
+                let nama_tem
+                let namacr
+                let sbbperalihan_cr
+                let trnke_cr
+
                 nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1)
                 namadr = nama_tem.nama
                 sbbperalihan_dr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
                 trnke_dr = nama_tem.trnke
-                nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
-                namacr = nama_tem.nama
-                sbbperalihan_cr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
-                trnke_cr = nama_tem.trnke
+
+                if (gl_jns_cr_1 == "1") {
+                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
+                    namacr = nama_tem.nama
+                    sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
+                    trnke_cr = 0
+                    cracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + cracc
+                } else {
+                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
+                    namacr = nama_tem.nama
+                    sbbperalihan_cr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
+                    trnke_cr = nama_tem.trnke
+                }
+
                 notrn = await getnotrn(BATCH)
 
 
@@ -272,26 +288,27 @@ router.post('/', async (req, res) => {
                     )
                 } catch (e) {
                 }
-
-                try {
-                    await db.sequelize.query(
-                        "INSERT INTO transpc " +
-                        "(tgltrn,           batch,          notrn, " +
-                        "noacc,             dc,             nominal," +
-                        "stscetak,          kdtrnbuku,      trnke)" +
-                        "VALUES " +
-                        "(?,                ?,              ?," +
-                        "?,                 ?,              ?," +
-                        "?,                 ?,              ?)",
-                        {
-                            replacements: [
-                                tgltrn, BATCH, notrn,
-                                gl_rek_cr_1, "C", amount,
-                                "N", KODE_TRN_BUKU, trnke_cr
-                            ]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == "2") {
+                    try {
+                        await db.sequelize.query(
+                            "INSERT INTO transpc " +
+                            "(tgltrn,           batch,          notrn, " +
+                            "noacc,             dc,             nominal," +
+                            "stscetak,          kdtrnbuku,      trnke)" +
+                            "VALUES " +
+                            "(?,                ?,              ?," +
+                            "?,                 ?,              ?," +
+                            "?,                 ?,              ?)",
+                            {
+                                replacements: [
+                                    tgltrn, BATCH, notrn,
+                                    gl_rek_cr_1, "C", amount,
+                                    "N", KODE_TRN_BUKU, trnke_cr
+                                ]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
 
                 // transaksi FEE
@@ -307,14 +324,16 @@ router.post('/', async (req, res) => {
                     } catch (e) {
                     }
 
-                    try {
-                        await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
-                            {
-                                replacements: [trans_fee, trans_fee, gl_rek_cr_2]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
+                                {
+                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
 
                     // insert transaksi
@@ -328,7 +347,7 @@ router.post('/', async (req, res) => {
                     dc = ""
                     nominal = trans_fee
                     tglval = tgltrn
-                    ket = product_name
+                    ket = keterangan
                     kdbank = gl_rek_db_2.substr(0, 3)
                     kdcab = gl_rek_db_2.substr(3, 2)
                     kdloc = gl_rek_db_2.substr(5, 2)
@@ -363,10 +382,20 @@ router.post('/', async (req, res) => {
                     namadr = nama_tem.nama
                     sbbperalihan_dr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_dr = nama_tem.trnke
-                    nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
-                    namacr = nama_tem.nama
-                    sbbperalihan_cr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
-                    trnke_cr = nama_tem.trnke
+
+                    if (gl_jns_cr_2 == "2") {
+                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
+                        namacr = nama_tem.nama
+                        sbbperalihan_cr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
+                        trnke_cr = nama_tem.trnke
+                    } else {
+                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2)
+                        namacr = nama_tem.nama
+                        sbbperalihan_cr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + cracc
+                        cracc = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + cracc
+                        trnke_cr = 0
+                    }
+
                     notrn = await getnotrn(BATCH)
 
                     try {
@@ -450,26 +479,27 @@ router.post('/', async (req, res) => {
                         )
                     } catch (e) {
                     }
-
-                    try {
-                        await db.sequelize.query(
-                            "INSERT INTO transpc " +
-                            "(tgltrn,           batch,          notrn, " +
-                            "noacc,             dc,             nominal," +
-                            "stscetak,          kdtrnbuku,      trnke)" +
-                            "VALUES " +
-                            "(?,                ?,              ?," +
-                            "?,                 ?,              ?," +
-                            "?,                 ?,              ?)",
-                            {
-                                replacements: [
-                                    tgltrn, BATCH, notrn,
-                                    gl_rek_cr_2, "C", trans_fee,
-                                    "N", KODE_TRN_BUKU, trnke_cr
-                                ]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "INSERT INTO transpc " +
+                                "(tgltrn,           batch,          notrn, " +
+                                "noacc,             dc,             nominal," +
+                                "stscetak,          kdtrnbuku,      trnke)" +
+                                "VALUES " +
+                                "(?,                ?,              ?," +
+                                "?,                 ?,              ?," +
+                                "?,                 ?,              ?)",
+                                {
+                                    replacements: [
+                                        tgltrn, BATCH, notrn,
+                                        gl_rek_cr_2, "C", trans_fee,
+                                        "N", KODE_TRN_BUKU, trnke_cr
+                                    ]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
                 }
 
@@ -578,22 +608,23 @@ router.post('/', async (req, res) => {
                     )
                 } catch (e) {
                 }
-
-                try {
-                    await db.sequelize.query(
-                        "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
-                        {
-                            replacements: [amount, amount, gl_rek_cr_1]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == "2") {
+                    try {
+                        await db.sequelize.query(
+                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
+                            {
+                                replacements: [amount, amount, gl_rek_cr_1]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
 
                 // insert transaksi
                 tgltrn = await gettanggal()
                 trnuser = USER_ID
                 kodetrn = "2201"
-                dracc = gl_rek_cr_1
+                let dracc = gl_rek_cr_1
                 drmodul = gl_jns_cr_1
                 cracc = gl_rek_db_1
                 crmodul = gl_jns_db_1
@@ -631,10 +662,24 @@ router.post('/', async (req, res) => {
                 depfrom = ""
                 depto = ""
                 dokumen = rrn + tgltrn
-                nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
-                namadr = nama_tem.nama
-                sbbperalihan_dr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
-                trnke_dr = nama_tem.trnke
+                let nama_tem
+                let sbbperalihan_dr
+                let namadr
+                let trnke_dr
+
+                if (gl_jns_cr_1 == "1") {
+                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1)
+                    namadr = nama_tem.nama
+                    sbbperalihan_dr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
+                    trnke_dr = nama_tem.trnke
+                    dracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
+                } else {
+                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1)
+                    namadr = nama_tem.nama
+                    sbbperalihan_dr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
+                    trnke_dr = nama_tem.trnke
+                }
+
                 nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1)
                 namacr = nama_tem.nama
                 sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
@@ -723,25 +768,28 @@ router.post('/', async (req, res) => {
                 } catch (e) {
                 }
 
-                try {
-                    await db.sequelize.query(
-                        "INSERT INTO transpc " +
-                        "(tgltrn,           batch,          notrn, " +
-                        "noacc,             dc,             nominal," +
-                        "stscetak,          kdtrnbuku,      trnke)" +
-                        "VALUES " +
-                        "(?,                ?,              ?," +
-                        "?,                 ?,              ?," +
-                        "?,                 ?,              ?)",
-                        {
-                            replacements: [
-                                tgltrn, BATCH, notrn,
-                                gl_rek_cr_1, "D", amount,
-                                "N", KODE_TRN_BUKU, trnke_cr
-                            ]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == "2") {
+
+                    try {
+                        await db.sequelize.query(
+                            "INSERT INTO transpc " +
+                            "(tgltrn,           batch,          notrn, " +
+                            "noacc,             dc,             nominal," +
+                            "stscetak,          kdtrnbuku,      trnke)" +
+                            "VALUES " +
+                            "(?,                ?,              ?," +
+                            "?,                 ?,              ?," +
+                            "?,                 ?,              ?)",
+                            {
+                                replacements: [
+                                    tgltrn, BATCH, notrn,
+                                    gl_rek_cr_1, "D", amount,
+                                    "N", KODE_TRN_BUKU, trnke_cr
+                                ]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
 
                 // transaksi FEE
@@ -756,14 +804,16 @@ router.post('/', async (req, res) => {
                     } catch (e) {
                     }
 
-                    try {
-                        await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
-                            {
-                                replacements: [trans_fee, trans_fee, gl_rek_cr_2]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
+                                {
+                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
 
                     // insert transaksi
@@ -777,7 +827,7 @@ router.post('/', async (req, res) => {
                     dc = ""
                     nominal = trans_fee
                     tglval = tgltrn
-                    ket = product_name
+                    ket = keterangan
                     kdbank = gl_rek_cr_2.substr(0, 3)
                     kdcab = gl_rek_cr_2.substr(3, 2)
                     kdloc = gl_rek_cr_2.substr(5, 2)
@@ -808,10 +858,23 @@ router.post('/', async (req, res) => {
                     depfrom = ""
                     depto = ""
                     dokumen = rrn + tgltrn
-                    nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
-                    namadr = nama_tem.nama
-                    sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
-                    trnke_dr = nama_tem.trnke
+                    let nama_tem
+                    let namadr
+                    let sbbperalihan_dr
+                    let trnke_dr
+                    if (gl_jns_cr_2 == "2") {
+                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
+                        namadr = nama_tem.nama
+                        sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
+                        trnke_dr = nama_tem.trnke
+                    } else {
+                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2)
+                        namadr = nama_tem.nama
+                        sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + dracc
+                        trnke_dr = "0"
+                        dracc = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + dracc
+
+                    }
                     nama_tem = await getbalance(gl_rek_db_2, gl_jns_db_2)
                     namacr = nama_tem.nama
                     sbbperalihan_cr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + nama_tem.sbbtab
@@ -899,26 +962,27 @@ router.post('/', async (req, res) => {
                         )
                     } catch (e) {
                     }
-
-                    try {
-                        await db.sequelize.query(
-                            "INSERT INTO transpc " +
-                            "(tgltrn,           batch,          notrn, " +
-                            "noacc,             dc,             nominal," +
-                            "stscetak,          kdtrnbuku,      trnke)" +
-                            "VALUES " +
-                            "(?,                ?,              ?," +
-                            "?,                 ?,              ?," +
-                            "?,                 ?,              ?)",
-                            {
-                                replacements: [
-                                    tgltrn, BATCH, notrn,
-                                    gl_rek_cr_2, "D", trans_fee,
-                                    "N", KODE_TRN_BUKU, trnke_cr
-                                ]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "INSERT INTO transpc " +
+                                "(tgltrn,           batch,          notrn, " +
+                                "noacc,             dc,             nominal," +
+                                "stscetak,          kdtrnbuku,      trnke)" +
+                                "VALUES " +
+                                "(?,                ?,              ?," +
+                                "?,                 ?,              ?," +
+                                "?,                 ?,              ?)",
+                                {
+                                    replacements: [
+                                        tgltrn, BATCH, notrn,
+                                        gl_rek_cr_2, "D", trans_fee,
+                                        "N", KODE_TRN_BUKU, trnke_cr
+                                    ]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
                 }
 
@@ -1031,24 +1095,24 @@ router.post('/', async (req, res) => {
                     )
                 } catch (e) {
                 }
-
-                try {
-                    await db.sequelize.query(
-                        "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
-                        {
-                            replacements: [amount, amount, gl_rek_cr_1]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == 2) {
+                    try {
+                        await db.sequelize.query(
+                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
+                            {
+                                replacements: [amount, amount, gl_rek_cr_1]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
-
                 // insert transaksi
                 tgltrn = await gettanggal()
                 trnuser = USER_ID
                 kodetrn = "2201"
                 dracc = gl_rek_db_1
                 drmodul = gl_jns_db_1
-                cracc = gl_rek_cr_1
+                let cracc = gl_rek_cr_1
                 crmodul = gl_jns_cr_1
                 dc = ""
                 nominal = amount
@@ -1084,14 +1148,29 @@ router.post('/', async (req, res) => {
                 depfrom = ""
                 depto = ""
                 dokumen = rrn + tgltrn
+                let nama_tem
+                let namacr
+                let sbbperalihan_cr
+                let trnke_cr
+
                 nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1)
                 namadr = nama_tem.nama
                 sbbperalihan_dr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
                 trnke_dr = nama_tem.trnke
-                nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
-                namacr = nama_tem.nama
-                sbbperalihan_cr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
-                trnke_cr = nama_tem.trnke
+
+                if (gl_jns_cr_1 == "1") {
+                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
+                    namacr = nama_tem.nama
+                    sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
+                    trnke_cr = 0
+                    cracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + cracc
+                } else {
+                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
+                    namacr = nama_tem.nama
+                    sbbperalihan_cr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
+                    trnke_cr = nama_tem.trnke
+                }
+
                 notrn = await getnotrn(BATCH)
 
 
@@ -1173,26 +1252,27 @@ router.post('/', async (req, res) => {
                     )
                 } catch (e) {
                 }
-
-                try {
-                    await db.sequelize.query(
-                        "INSERT INTO transpc " +
-                        "(tgltrn,           batch,          notrn, " +
-                        "noacc,             dc,             nominal," +
-                        "stscetak,          kdtrnbuku,      trnke)" +
-                        "VALUES " +
-                        "(?,                ?,              ?," +
-                        "?,                 ?,              ?," +
-                        "?,                 ?,              ?)",
-                        {
-                            replacements: [
-                                tgltrn, BATCH, notrn,
-                                gl_rek_cr_1, "C", amount,
-                                "N", KODE_TRN_BUKU, trnke_cr
-                            ]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == "2") {
+                    try {
+                        await db.sequelize.query(
+                            "INSERT INTO transpc " +
+                            "(tgltrn,           batch,          notrn, " +
+                            "noacc,             dc,             nominal," +
+                            "stscetak,          kdtrnbuku,      trnke)" +
+                            "VALUES " +
+                            "(?,                ?,              ?," +
+                            "?,                 ?,              ?," +
+                            "?,                 ?,              ?)",
+                            {
+                                replacements: [
+                                    tgltrn, BATCH, notrn,
+                                    gl_rek_cr_1, "C", amount,
+                                    "N", KODE_TRN_BUKU, trnke_cr
+                                ]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
 
                 // transaksi FEE
@@ -1208,14 +1288,16 @@ router.post('/', async (req, res) => {
                     } catch (e) {
                     }
 
-                    try {
-                        await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
-                            {
-                                replacements: [trans_fee, trans_fee, gl_rek_cr_2]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =?",
+                                {
+                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
 
                     // insert transaksi
@@ -1229,7 +1311,7 @@ router.post('/', async (req, res) => {
                     dc = ""
                     nominal = trans_fee
                     tglval = tgltrn
-                    ket = product_name
+                    ket = keterangan
                     kdbank = gl_rek_db_2.substr(0, 3)
                     kdcab = gl_rek_db_2.substr(3, 2)
                     kdloc = gl_rek_db_2.substr(5, 2)
@@ -1264,10 +1346,20 @@ router.post('/', async (req, res) => {
                     namadr = nama_tem.nama
                     sbbperalihan_dr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_dr = nama_tem.trnke
-                    nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
-                    namacr = nama_tem.nama
-                    sbbperalihan_cr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
-                    trnke_cr = nama_tem.trnke
+
+                    if (gl_jns_cr_2 == "2") {
+                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
+                        namacr = nama_tem.nama
+                        sbbperalihan_cr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
+                        trnke_cr = nama_tem.trnke
+                    } else {
+                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2)
+                        namacr = nama_tem.nama
+                        sbbperalihan_cr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + cracc
+                        cracc = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + cracc
+                        trnke_cr = 0
+                    }
+
                     notrn = await getnotrn(BATCH)
 
                     try {
@@ -1351,26 +1443,27 @@ router.post('/', async (req, res) => {
                         )
                     } catch (e) {
                     }
-
-                    try {
-                        await db.sequelize.query(
-                            "INSERT INTO transpc " +
-                            "(tgltrn,           batch,          notrn, " +
-                            "noacc,             dc,             nominal," +
-                            "stscetak,          kdtrnbuku,      trnke)" +
-                            "VALUES " +
-                            "(?,                ?,              ?," +
-                            "?,                 ?,              ?," +
-                            "?,                 ?,              ?)",
-                            {
-                                replacements: [
-                                    tgltrn, BATCH, notrn,
-                                    gl_rek_cr_2, "C", trans_fee,
-                                    "N", KODE_TRN_BUKU, trnke_cr
-                                ]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "INSERT INTO transpc " +
+                                "(tgltrn,           batch,          notrn, " +
+                                "noacc,             dc,             nominal," +
+                                "stscetak,          kdtrnbuku,      trnke)" +
+                                "VALUES " +
+                                "(?,                ?,              ?," +
+                                "?,                 ?,              ?," +
+                                "?,                 ?,              ?)",
+                                {
+                                    replacements: [
+                                        tgltrn, BATCH, notrn,
+                                        gl_rek_cr_2, "C", trans_fee,
+                                        "N", KODE_TRN_BUKU, trnke_cr
+                                    ]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
                 }
 
@@ -1479,22 +1572,23 @@ router.post('/', async (req, res) => {
                     )
                 } catch (e) {
                 }
-
-                try {
-                    await db.sequelize.query(
-                        "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
-                        {
-                            replacements: [amount, amount, gl_rek_cr_1]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == "2") {
+                    try {
+                        await db.sequelize.query(
+                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
+                            {
+                                replacements: [amount, amount, gl_rek_cr_1]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
 
                 // insert transaksi
                 tgltrn = await gettanggal()
                 trnuser = USER_ID
                 kodetrn = "2201"
-                dracc = gl_rek_cr_1
+                let dracc = gl_rek_cr_1
                 drmodul = gl_jns_cr_1
                 cracc = gl_rek_db_1
                 crmodul = gl_jns_db_1
@@ -1532,10 +1626,24 @@ router.post('/', async (req, res) => {
                 depfrom = ""
                 depto = ""
                 dokumen = rrn + tgltrn
-                nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1)
-                namadr = nama_tem.nama
-                sbbperalihan_dr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
-                trnke_dr = nama_tem.trnke
+                let nama_tem
+                let sbbperalihan_dr
+                let namadr
+                let trnke_dr
+
+                if (gl_jns_cr_1 == "1") {
+                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1)
+                    namadr = nama_tem.nama
+                    sbbperalihan_dr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
+                    trnke_dr = nama_tem.trnke
+                    dracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
+                } else {
+                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1)
+                    namadr = nama_tem.nama
+                    sbbperalihan_dr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
+                    trnke_dr = nama_tem.trnke
+                }
+
                 nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1)
                 namacr = nama_tem.nama
                 sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
@@ -1624,25 +1732,28 @@ router.post('/', async (req, res) => {
                 } catch (e) {
                 }
 
-                try {
-                    await db.sequelize.query(
-                        "INSERT INTO transpc " +
-                        "(tgltrn,           batch,          notrn, " +
-                        "noacc,             dc,             nominal," +
-                        "stscetak,          kdtrnbuku,      trnke)" +
-                        "VALUES " +
-                        "(?,                ?,              ?," +
-                        "?,                 ?,              ?," +
-                        "?,                 ?,              ?)",
-                        {
-                            replacements: [
-                                tgltrn, BATCH, notrn,
-                                gl_rek_cr_1, "D", amount,
-                                "N", KODE_TRN_BUKU, trnke_cr
-                            ]
-                        }
-                    )
-                } catch (e) {
+                if (gl_jns_cr_1 == "2") {
+
+                    try {
+                        await db.sequelize.query(
+                            "INSERT INTO transpc " +
+                            "(tgltrn,           batch,          notrn, " +
+                            "noacc,             dc,             nominal," +
+                            "stscetak,          kdtrnbuku,      trnke)" +
+                            "VALUES " +
+                            "(?,                ?,              ?," +
+                            "?,                 ?,              ?," +
+                            "?,                 ?,              ?)",
+                            {
+                                replacements: [
+                                    tgltrn, BATCH, notrn,
+                                    gl_rek_cr_1, "D", amount,
+                                    "N", KODE_TRN_BUKU, trnke_cr
+                                ]
+                            }
+                        )
+                    } catch (e) {
+                    }
                 }
 
                 // transaksi FEE
@@ -1657,14 +1768,16 @@ router.post('/', async (req, res) => {
                     } catch (e) {
                     }
 
-                    try {
-                        await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
-                            {
-                                replacements: [trans_fee, trans_fee, gl_rek_cr_2]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =?",
+                                {
+                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
 
                     // insert transaksi
@@ -1678,7 +1791,7 @@ router.post('/', async (req, res) => {
                     dc = ""
                     nominal = trans_fee
                     tglval = tgltrn
-                    ket = product_name
+                    ket = keterangan
                     kdbank = gl_rek_cr_2.substr(0, 3)
                     kdcab = gl_rek_cr_2.substr(3, 2)
                     kdloc = gl_rek_cr_2.substr(5, 2)
@@ -1709,10 +1822,23 @@ router.post('/', async (req, res) => {
                     depfrom = ""
                     depto = ""
                     dokumen = rrn + tgltrn
-                    nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
-                    namadr = nama_tem.nama
-                    sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
-                    trnke_dr = nama_tem.trnke
+                    let nama_tem
+                    let namadr
+                    let sbbperalihan_dr
+                    let trnke_dr
+                    if (gl_jns_cr_2 == "2") {
+                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2)
+                        namadr = nama_tem.nama
+                        sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
+                        trnke_dr = nama_tem.trnke
+                    } else {
+                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2)
+                        namadr = nama_tem.nama
+                        sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + dracc
+                        trnke_dr = "0"
+                        dracc = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + dracc
+
+                    }
                     nama_tem = await getbalance(gl_rek_db_2, gl_jns_db_2)
                     namacr = nama_tem.nama
                     sbbperalihan_cr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + nama_tem.sbbtab
@@ -1800,26 +1926,27 @@ router.post('/', async (req, res) => {
                         )
                     } catch (e) {
                     }
-
-                    try {
-                        await db.sequelize.query(
-                            "INSERT INTO transpc " +
-                            "(tgltrn,           batch,          notrn, " +
-                            "noacc,             dc,             nominal," +
-                            "stscetak,          kdtrnbuku,      trnke)" +
-                            "VALUES " +
-                            "(?,                ?,              ?," +
-                            "?,                 ?,              ?," +
-                            "?,                 ?,              ?)",
-                            {
-                                replacements: [
-                                    tgltrn, BATCH, notrn,
-                                    gl_rek_cr_2, "D", trans_fee,
-                                    "N", KODE_TRN_BUKU, trnke_cr
-                                ]
-                            }
-                        )
-                    } catch (e) {
+                    if (gl_jns_cr_2 == "2") {
+                        try {
+                            await db.sequelize.query(
+                                "INSERT INTO transpc " +
+                                "(tgltrn,           batch,          notrn, " +
+                                "noacc,             dc,             nominal," +
+                                "stscetak,          kdtrnbuku,      trnke)" +
+                                "VALUES " +
+                                "(?,                ?,              ?," +
+                                "?,                 ?,              ?," +
+                                "?,                 ?,              ?)",
+                                {
+                                    replacements: [
+                                        tgltrn, BATCH, notrn,
+                                        gl_rek_cr_2, "D", trans_fee,
+                                        "N", KODE_TRN_BUKU, trnke_cr
+                                    ]
+                                }
+                            )
+                        } catch (e) {
+                        }
                     }
                 }
 
