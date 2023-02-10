@@ -32,10 +32,7 @@ router.post('/', async (req, res) => {
         trx_type: "string",
         amount: "number",
         trans_fee: "number",
-        token: "string",
         keterangan: "string",
-        terminal_id: "string",
-        lokasi: "string",
         tgl_trans: "string",
         tgl_transmis: "string",
         rrn: "string"
@@ -48,7 +45,7 @@ router.post('/', async (req, res) => {
 
     if (validate.length) {
         return res
-            .status(400)
+            .status(200)
             .json(validate);
     }
 
@@ -76,7 +73,7 @@ router.post('/', async (req, res) => {
             {
             }
         )
-        return res.status(403).send({
+        return res.status(200).send({
             code: Sign_Off,
             status: "GAGAL",
             message: "Sedang Melakukan Closing",
@@ -102,7 +99,7 @@ router.post('/', async (req, res) => {
                 console.log("Status Gagal ");
                 console.log("message: Rekening Tidak Ditemukan ");
 
-                return res.status(400).send({
+                return res.status(200).send({
                     code: rek_tidakada,
                     status: "GAGAL",
                     message: "Rekening Tidak Ditemukan",
@@ -116,7 +113,7 @@ router.post('/', async (req, res) => {
                 console.log("Status Gagal ");
                 console.log("message: Rekening Tidak Aktif");
 
-                return res.status(400).send({
+                return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening Tidak Aktif",
@@ -130,7 +127,7 @@ router.post('/', async (req, res) => {
                 console.log("Status Gagal ");
                 console.log("message: Rekening Tutup");
 
-                return res.status(400).send({
+                return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening Tutup",
@@ -144,7 +141,7 @@ router.post('/', async (req, res) => {
                 console.log("Status Gagal ");
                 console.log("message: Rekening Tutup");
 
-                return res.status(400).send({
+                return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening Tutup",
@@ -158,7 +155,7 @@ router.post('/', async (req, res) => {
                 console.log("Status Gagal ");
                 console.log("message: Rekening Dihapus");
 
-                return res.status(400).send({
+                return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening Dihapus",
@@ -171,7 +168,7 @@ router.post('/', async (req, res) => {
 
                   // cek status blokir
                   if(request[0]["stsblok"] == "R"){
-                    return res.status(400).send({
+                    return res.status(200).send({
                         code: rek_blokir,
                         status: "GAGAL",
                         message: "Rekening Diblokir",
@@ -183,7 +180,7 @@ router.post('/', async (req, res) => {
                 if (trx_code == Req_Token_Tarik_Tunai) {
                     // cek saldo cukup atau tidak
                     if (request[0]["saldoeff"] < amount + trans_fee) {
-                        return res.status(400).send({
+                        return res.status(200).send({
                             code: saldo_kurang,
                             status: "GAGAL",
                             message: "Saldo Tidak Cukup",
@@ -207,9 +204,17 @@ router.post('/', async (req, res) => {
                                 message:"Token Sukses",
                                 rrn:rrn,
                                 data:{
-                                    no_rek:no_rek,
+                                    bpr_id: bpr_id, 
+                                    trx_code: trx_code,
+                                    trx_type: trx_type,
+                                    no_hp: no_hp,
+                                    no_rek:no_rek,  
                                     nama:request[0]["fnama"],
-                                    trx_type:trx_type,                                    
+                                    amount: amount,
+                                    trans_fee: trans_fee,                           
+                                    tgl_trans: tgl_trans,
+                                    tgl_transmis: tgl_transmis,            
+                                    noreff:BATCH + "1234554"+rrn+tgl_trans          
                                 }
     
                         
@@ -330,7 +335,7 @@ router.post('/', async (req, res) => {
 
 
                 } else {
-                    return res.status(400).send({
+                    return res.status(200).send({
                         code: invelid_transaction,
                         status: "GAGAL",
                         message: "Trx Type Tidak Ditemukan ",
@@ -346,7 +351,7 @@ router.post('/', async (req, res) => {
                 console.log("Status Gagal ");
                 console.log("No rekening Tidak Ditemukan");
 
-                return res.status(400).send({
+                return res.status(200).send({
                     code: rek_tidakada,
                     status: "GAGAL",
                     message: "No rekening Tidak Ditemukan",
@@ -361,7 +366,7 @@ router.post('/', async (req, res) => {
             console.log("Status Gagal ");
             console.log("No rekening Tidak Ditemukan");
 
-            return res.status(400).send({
+            return res.status(200).send({
                 code: rek_tidakada,
                 status: "GAGAL",
                 message: "No rekening Tidak Ditemukan",
@@ -372,7 +377,7 @@ router.post('/', async (req, res) => {
 
     } catch (error) {
         console.log('Error Inquiry Account', error);
-        return res.status(400).send({
+        return res.status(200).send({
             code: rek_tidakada,
             status: "GAGAL",
             message: "No rekening Tidak Ditemukan",
