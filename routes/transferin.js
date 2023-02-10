@@ -22,7 +22,8 @@ const {
     Req_Token_Tarik_Tunai,
     Release_Tarik_Tunai,
     Transfer_Out,
-    Transfer_In
+    Transfer_In,
+    Pindah_Buku
 } = process.env;
 
 router.post('/', async (req, res) => {
