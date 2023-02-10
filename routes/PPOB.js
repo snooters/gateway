@@ -54,8 +54,6 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    // let {no_hp,bpr_id,no_rek,product_name,token_mpin,trx_code,trx_type,amount,trans_fee,tgl_trans,tgl_transmis,rrn,data} = req.body;
-
     let { bpr_id, trx_code, trx_type, no_hp, no_rek, amount, trans_fee, tgl_trans, tgl_transmis, product_name, rrn, data } = req.body;
     let { gl_rek_db_1, gl_jns_db_1, gl_amount_db_1, gl_rek_cr_1, gl_jns_cr_1, gl_amount_cr_1, gl_rek_db_2, gl_jns_db_2, gl_amount_db_2, gl_rek_cr_2,
         gl_jns_cr_2, gl_amount_cr_2 } = data
