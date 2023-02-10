@@ -28,14 +28,14 @@ const {
 router.post('/', async (req, res) => {
     const schema = {
 
-        bank_pengirim: "string",
-        rek_pengirim: "string",
-        nama_pengirim: "string",
-        nama_bank_pengirim:"string",
+        bpr_id: "string",
+        no_rek: "string",
+        nama_rek: "string",
+        nama_bpr_id:"string",
         // no_hp: "string",
         // bpr_id: "string",
-        rek_penerima: "string",
-        nama_penerima: "string",
+        rek_tujuan: "string",
+        nama_tujuan: "string",
         trx_code: "string",
         trx_type: "string",
         amount: "number",
@@ -57,9 +57,9 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    let { bank_pengirim, rek_pengirim,nama_bank_pengirim, nama_pengirim, no_hp, bpr_id, rek_penerima,nama_penerima, trx_code, trx_type, amount, trans_fee, token, keterangan, terminal_id, lokasi, tgl_trans, tgl_transmis, rrn, data } = req.body
+    let { no_rek, nama_bpr_id, nama_rek, no_hp, bpr_id, rek_tujuan,nama_tujuan, trx_code, trx_type, amount, trans_fee, token, keterangan, terminal_id, lokasi, tgl_trans, tgl_transmis, rrn, data } = req.body
 
-let no_rek = rek_penerima
+
 
 
 
@@ -216,12 +216,12 @@ let no_rek = rek_penerima
                                 rrn: rrn,
                                 data: {
                                     // bpr_id: bpr_id,
-                                    bank_pengirim: bank_pengirim,
+                                    bpr_id: bpr_id,
                                     no_hp: no_hp,
-                                    rek_pengirim: rek_pengirim,
-                                    nama_pengirim: nama_pengirim,
-                                    rek_penerima: no_rek,
-                                    nama_penerima: request[0]["fnama"],
+                                    no_rek: no_rek,
+                                    nama_rek: nama_rek,
+                                    rek_tujuan: no_rek,
+                                    nama_tujuan: request[0]["fnama"],
                                     trx_code: trx_code,
                                     trx_type: trx_type,
                                     amount: amount,
