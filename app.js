@@ -18,6 +18,7 @@ var tokenrouter = require('./routes/token');
 var transferoutrouter = require('./routes/transferout');
 var transferinrouter = require('./routes/transferin');
 var pindahbukurouter = require('./routes/pindahbuku');
+var transferrouter = require('./routes/transfer');
 
 const { sequelize } = require("./connection");
 
@@ -50,6 +51,7 @@ app.use('/token', tokenrouter);
 app.use('/transferout', transferoutrouter);
 app.use('/transferin', transferinrouter);
 app.use('/pindahbuku', pindahbukurouter);
+app.use('/transfer',transferrouter);
 
 app.get("/", (req, res) => {
   res.send("gateway-api");
