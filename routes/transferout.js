@@ -27,12 +27,12 @@ const {
 router.post('/', async (req, res) => {
     const schema = {
 
-        bank_penerima: "string",
-        rek_penerima: "string",
-        nama_penerima: "string",
+        bank_tujuan: "string",
+        rek_tujuan: "string",
+        nama_tujuan: "string",
         no_hp: "string",
         // bpr_id: "string",
-        rek_pengirim: "string",
+        no_rek: "string",
         trx_code: "string",
         trx_type: "string",
         amount: "number",
@@ -54,15 +54,14 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    let { bank_penerima, rek_penerima, nama_penerima, no_hp, bpr_id, rek_pengirim, trx_code, trx_type, amount, trans_fee, token, keterangan, terminal_id, lokasi, tgl_trans, tgl_transmis, rrn, data } = req.body
-
+    let { bank_tujuan, rek_tujuan, nama_tujuan, no_hp, bpr_id, no_rek,nama_rek, trx_code, trx_type, amount, trans_fee, token, keterangan, terminal_id, lokasi, tgl_trans, tgl_transmis, rrn, data } = req.body
 
     //    set tanggal transaksi
     let tgltrn = tgl_trans.substr(0, 8);
     //  set kode kantor
-    let kdbank = rek_pengirim.substr(0, 3);
-    let kdcab = rek_pengirim.substr(3, 2);
-    let kdloc = rek_pengirim.substr(5, 2);
+    let kdbank = no_rek.substr(0, 3);
+    let kdcab = no_rek.substr(3, 2);
+    let kdloc = no_rek.substr(5, 2);
 
     // cek status closing
     let stsclose = await db.sequelize.query(
@@ -91,7 +90,7 @@ router.post('/', async (req, res) => {
         let request = await db.sequelize.query(
             "select noacc,stsblok,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec from m_tabunganc where noacc = ?",
             {
-                replacements: [rek_pengirim],
+                replacements: [no_rek],
                 type: db.sequelize.QueryTypes.SELECT,
             }
         )
@@ -198,7 +197,7 @@ router.post('/', async (req, res) => {
                         let debet = await db.sequelize.query(
                             "update m_tabunganc set saldoakhir = saldoakhir - ? , mutasidr = mutasidr + ?,trnke=trnke + 1 where noacc = ?",
                             {
-                                replacements: [amount, amount, rek_pengirim]
+                                replacements: [amount, amount, no_rek]
                             }
                         );
 
@@ -213,11 +212,11 @@ router.post('/', async (req, res) => {
                                     trx_type: trx_type,
                                     trx_code: trx_code,
                                     no_hp: no_hp,
-                                    rek_pengirim: rek_pengirim,
+                                    no_rek: no_rek,
                                     nama_pengirim: request[0]["fnama"],
-                                    bank_penerima: bank_penerima,
-                                    rek_penerima: rek_penerima,
-                                    nama_penerima: nama_penerima,
+                                    bank_tujuan: bank_tujuan,
+                                    rek_tujuan: rek_tujuan,
+                                    nama_tujuan: nama_tujuan,
                                     amount: amount,
                                     trans_fee: trans_fee,
                                     tgl_trans: tgl_trans,
@@ -231,7 +230,7 @@ router.post('/', async (req, res) => {
                         let trnkedr = await db.sequelize.query(
                             "select * from m_tabunganc where noacc = ?",
                             {
-                                replacements: [rek_pengirim]
+                                replacements: [no_rek]
                             }
                         );
 
@@ -253,7 +252,7 @@ router.post('/', async (req, res) => {
                             "values (" +
                             "?,         ?,      ?,      ?,      ?,  ?,          ?,          ?,          ?)",
                             {
-                                replacements: [tgltrn, BATCH, notrn, rek_pengirim, "D", nominal_pok, "N", KODE_TRN_BUKU, trnkedr[0]["trnke"]]
+                                replacements: [tgltrn, BATCH, notrn, no_rek, "D", nominal_pok, "N", KODE_TRN_BUKU, trnkedr[0]["trnke"]]
                             }
                         );
 
@@ -291,7 +290,7 @@ router.post('/', async (req, res) => {
                                 {
                                     replacements: [
                                         tgltrn, USER_ID, BATCH, notrn, KODE_TRN_PPOB,
-                                        rek_pengirim, '2', cracc, '1', "",
+                                        no_rek, '2', cracc, '1', "",
                                         rrn, nominal_pok, tgltrn, keterangan, kdbank,
                                         kdcab, kdloc, '5', USER_ID, tgljam,
                                         terminal_id, "", "", "", "",
@@ -334,7 +333,7 @@ router.post('/', async (req, res) => {
                                 "values (" +
                                 "?,         ?,      ?,      ?,      ?,  ?,          ?,          ?,          ?)",
                                 {
-                                    replacements: [tgltrn, BATCH, notrn, rek_pengirim, "D", nominal_pok, "N", KODE_TRN_BUKU, trnke]
+                                    replacements: [tgltrn, BATCH, notrn, no_rek, "D", nominal_pok, "N", KODE_TRN_BUKU, trnke]
                                 }
                             );
                         };
