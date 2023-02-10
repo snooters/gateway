@@ -38,13 +38,18 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    let { bpr_id, trx_code, trx_type, tgl_trans, tgl_transmis, rrn, data } = req.body;
+    let { bpr_id, trx_code, trx_type, tgl_trans, tgl_transmis, rrn, data,gl_jns,no_rek } = req.body;
 
     if (trx_code == Inquiry_Account) {
-        let hasil = await getnamaacc(data.no_rek,data.gl_jns)
+        let hasil
+        if(!no_rek){
+            hasil = await getnamaacc(data.no_rek,data.gl_jns)
+        }else{
+            hasil = await getnamaacc(no_rek,gl_jns)
+        }
         let stsrec = hasil.stsrec
         let stsblok = hasil.stsblok
-        let no_rek = hasil.no_rek
+        let no_rek1 = hasil.no_rek
         let nama_rek = hasil.nama
 
         // jika status rekening belum di otorisasi
@@ -99,7 +104,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         rrn: rrn,
-                        no_rek: no_rek,
+                        no_rek: no_rek1,
                         nama_rek: nama_rek
                     }
                 });
