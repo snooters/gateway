@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    let { bpr_id, trx_code, trx_type, no_hp, no_rek, amount, trans_fee, tgl_trans, tgl_transmis, keterangan, rrn, data } = req.body;
+    let { bpr_id, trx_code, trx_type, no_hp, no_rek, amount, trans_fee, tgl_trans, tgl_transmis, keterangan,acq_id, rrn, data } = req.body;
     let { gl_rek_db_1, gl_jns_db_1, gl_amount_db_1, gl_rek_cr_1, gl_jns_cr_1, gl_amount_cr_1, gl_rek_db_2, gl_jns_db_2, gl_amount_db_2, gl_rek_cr_2,
         gl_jns_cr_2, gl_amount_cr_2 } = data
 
@@ -1035,6 +1035,7 @@ router.post('/', async (req, res) => {
             datatemp =data.issuer
         }else if(Object.keys(data.acquirer).length != 0){
             datatemp =data.acquirer
+            bpr_id = acq_id
         }
         
         let { gl_rek_db_1, gl_jns_db_1, gl_amount_db_1, gl_rek_cr_1, gl_jns_cr_1, gl_amount_cr_1, gl_rek_db_2, gl_jns_db_2, gl_amount_db_2, gl_rek_cr_2,
