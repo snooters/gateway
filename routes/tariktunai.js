@@ -1029,11 +1029,11 @@ router.post('/', async (req, res) => {
     } else if (trx_code == Release_Tarik_Tunai) {
         let datatemp
 
-        if(data.on_us){
+        if(Object.keys(data.on_us).length != 0){
             datatemp =data.on_us
-        }else if(data.issuer){
+        }else if(Object.keys(data.issuer).length != 0){
             datatemp =data.issuer
-        }else if(data.acquirer){
+        }else if(Object.keys(data.acquirer).length != 0){
             datatemp =data.acquirer
         }
         
