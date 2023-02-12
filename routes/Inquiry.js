@@ -43,9 +43,9 @@ router.post('/', async (req, res) => {
     if (trx_code == Inquiry_Account) {
         let hasil
         if(!no_rek){
-            hasil = await getnamaacc(data.no_rek,data.gl_jns)
+            hasil = await getnamaacc(data.no_rek,data.gl_jns,bpr_id)
         }else{
-            hasil = await getnamaacc(no_rek,gl_jns)
+            hasil = await getnamaacc(no_rek,gl_jns,bpr_id)
         }
         let stsrec = hasil.stsrec
         let stsblok = hasil.stsblok
@@ -127,7 +127,7 @@ router.post('/', async (req, res) => {
         for (i in data) {
             let no_rek = data[i].no_rek    
             let gl_jns = data[i].gl_jns        
-            let hasil = await getbalance(no_rek,gl_jns)
+            let hasil = await getbalance(no_rek,gl_jns,bpr_id)
             let stsrec = hasil.stsrec
             let stsblok = hasil.stsblok
             let nama_rek = hasil.nama

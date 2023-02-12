@@ -4,7 +4,7 @@ const Validator = require('fastest-validator');
 const db = require("../connection/index");
 
 let hasil
-async function getnamaacc(noacc, gl_jns) {
+async function getnamaacc(noacc, gl_jns,bpr_id) {
     let no_rek = noacc
     let jnsrek = gl_jns
     if (jnsrek == "1") {
@@ -39,9 +39,9 @@ async function getnamaacc(noacc, gl_jns) {
         // inquery tabungan
         try {
             let request = await db.sequelize.query(
-                "select noacc,trnke,fnama,stsrec,stsblok,(select sbbprinc from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as sbbtab from m_tabunganc where noacc =?",
+                "select noacc,trnke,fnama,stsrec,stsblok,(select sbbprinc from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as sbbtab from m_tabunganc where noacc =? and nocif=?",
                 {
-                    replacements: [no_rek],
+                    replacements: [no_rek,bpr_id],
                     type: db.sequelize.QueryTypes.SELECT,
                 }
             )
@@ -68,7 +68,7 @@ async function getnamaacc(noacc, gl_jns) {
     }
 }
 
-async function getbalance(noacc, gl_jns) {
+async function getbalance(noacc, gl_jns,bpr_id) {
     let no_rek = noacc
     let jnsrek = gl_jns
     if (jnsrek == "1") {
@@ -102,9 +102,9 @@ async function getbalance(noacc, gl_jns) {
     } else if (jnsrek == "2") {
         try {
             let request = await db.sequelize.query(
-                "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec,stsblok,(select sbbprinc from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as sbbtab,trnke from m_tabunganc where noacc =?",
+                "select noacc,fnama,saldoakhir ,saldoakhir - case when saldoblok IS NULL  then 0  else saldoblok end  - (select minsaldo from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as  saldoeff,stsrec,stsblok,(select sbbprinc from setup_tabungan where kodeprd = m_tabunganc.kodeprd) as sbbtab,trnke from m_tabunganc where noacc =? and nocif=?",
                 {
-                    replacements: [no_rek],
+                    replacements: [no_rek,bpr_id],
                     type: db.sequelize.QueryTypes.SELECT,
                 }
             )
