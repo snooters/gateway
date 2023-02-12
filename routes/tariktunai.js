@@ -1090,14 +1090,14 @@ router.post('/', async (req, res) => {
                     })
                 }
 
-                if (saldoeff < (amount + trans_fee)) {
-                    return res.status(200).send({
-                        code: saldo_kurang,
-                        status: "GAGAL",
-                        message: "Saldo Tidak Cukup",
-                        data: null
-                    })
-                }
+                // if (saldoeff < (amount + trans_fee)) {
+                //     return res.status(200).send({
+                //         code: saldo_kurang,
+                //         status: "GAGAL",
+                //         message: "Saldo Tidak Cukup",
+                //         data: null
+                //     })
+                // }
 
                 // proses POKOK Ke Rekening Nasabah
                 try {
@@ -1567,14 +1567,14 @@ router.post('/', async (req, res) => {
                     })
                 }
 
-                if (saldoeff < (amount + trans_fee)) {
-                    return res.status(200).send({
-                        code: saldo_kurang,
-                        status: "GAGAL",
-                        message: "Saldo Tidak Cukup",
-                        data: null
-                    })
-                }
+                // if (saldoeff < (amount + trans_fee)) {
+                //     return res.status(200).send({
+                //         code: saldo_kurang,
+                //         status: "GAGAL",
+                //         message: "Saldo Tidak Cukup",
+                //         data: null
+                //     })
+                // }
 
                 // proses POKOK Ke Rekening Nasabah
                 try {
