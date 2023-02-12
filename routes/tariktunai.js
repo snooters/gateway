@@ -1580,7 +1580,7 @@ router.post('/', async (req, res) => {
                 // proses POKOK Ke Rekening Nasabah
                 try {
                     await db.sequelize.query(
-                        "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                        "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                         {
                             replacements: [amount, amount, gl_rek_db_1,bpr_id]
                         }
@@ -1590,7 +1590,7 @@ router.post('/', async (req, res) => {
                 if (gl_jns_cr_1 == "2") {
                     try {
                         await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
                                 replacements: [amount, amount, gl_rek_cr_1,bpr_id]
                             }
@@ -1603,10 +1603,10 @@ router.post('/', async (req, res) => {
                 tgltrn = await gettanggal()
                 trnuser = USER_ID
                 kodetrn = "2201"
-                let dracc = gl_rek_cr_1
-                drmodul = gl_jns_cr_1
-                cracc = gl_rek_db_1
-                crmodul = gl_jns_db_1
+                let dracc =gl_rek_db_1 
+                drmodul = gl_jns_db_1
+                cracc = gl_rek_cr_1
+                crmodul = gl_jns_cr_1
                 dc = ""
                 nominal = amount
                 tglval = tgltrn
@@ -1647,21 +1647,21 @@ router.post('/', async (req, res) => {
                 let trnke_dr
 
                 if (gl_jns_cr_1 == "1") {
-                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1,bpr_id)
+                    nama_tem = await getnamaacc(gl_rek_db_1, gl_jns_db_1,bpr_id)
                     namadr = nama_tem.nama
                     sbbperalihan_dr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
                     trnke_dr = nama_tem.trnke
-                    dracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
+                    dracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
                 } else {
-                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1,bpr_id)
+                    nama_tem = await getnamaacc(gl_rek_db_1, gl_jns_db_1,bpr_id)
                     namadr = nama_tem.nama
                     sbbperalihan_dr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_dr = nama_tem.trnke
                 }
 
-                nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1,bpr_id)
+                nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1,bpr_id)
                 namacr = nama_tem.nama
-                sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
+                sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
                 trnke_cr = nama_tem.trnke
                 notrn = await getnotrn(BATCH)
 
@@ -1739,7 +1739,7 @@ router.post('/', async (req, res) => {
                         {
                             replacements: [
                                 tgltrn, BATCH, notrn,
-                                gl_rek_db_1, "C", amount,
+                                gl_rek_db_1, "D", amount,
                                 "N", KODE_TRN_BUKU, trnke_dr
                             ]
                         }
@@ -1762,7 +1762,7 @@ router.post('/', async (req, res) => {
                             {
                                 replacements: [
                                     tgltrn, BATCH, notrn,
-                                    gl_rek_cr_1, "D", amount,
+                                    gl_rek_cr_1, "C", amount,
                                     "N", KODE_TRN_BUKU, trnke_cr
                                 ]
                             }
@@ -1775,7 +1775,7 @@ router.post('/', async (req, res) => {
                 if (trans_fee > 0) {
                     try {
                         await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
                                 replacements: [trans_fee, trans_fee, gl_rek_db_2,bpr_id]
                             }
@@ -1786,7 +1786,7 @@ router.post('/', async (req, res) => {
                     if (gl_jns_cr_2 == "2") {
                         try {
                             await db.sequelize.query(
-                                "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                                "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                                 {
                                     replacements: [trans_fee, trans_fee, gl_rek_cr_2,bpr_id]
                                 }
@@ -1934,7 +1934,7 @@ router.post('/', async (req, res) => {
                             {
                                 replacements: [
                                     tgltrn, BATCH, notrn,
-                                    gl_rek_db_2, "C", trans_fee,
+                                    gl_rek_db_2, "D", trans_fee,
                                     "N", KODE_TRN_BUKU, trnke_dr
                                 ]
                             }
@@ -1955,7 +1955,7 @@ router.post('/', async (req, res) => {
                                 {
                                     replacements: [
                                         tgltrn, BATCH, notrn,
-                                        gl_rek_cr_2, "D", trans_fee,
+                                        gl_rek_cr_2, "C", trans_fee,
                                         "N", KODE_TRN_BUKU, trnke_cr
                                     ]
                                 }
