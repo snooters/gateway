@@ -1098,7 +1098,7 @@ router.post('/', async (req, res) => {
                         await db.sequelize.query(
                             "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
-                                replacements: [amount, amount, gl_rek_cr_1],bpr_id
+                                replacements: [amount, amount, gl_rek_cr_1,bpr_id]
                             }
                         )
                     } catch (e) {
