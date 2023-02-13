@@ -535,7 +535,7 @@ router.post('/', async (req, res) => {
 
 
 
-
+// rev transfer in
         } else if (trx_type = "REV") {
 
 
@@ -600,7 +600,7 @@ router.post('/', async (req, res) => {
                 // proses POKOK Ke Rekening Nasabah
                 try {
                     await db.sequelize.query(
-                        "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                        "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                         {
                             replacements: [amount, amount, gl_rek_db_1,bank_tujuan]
                         }
@@ -610,7 +610,7 @@ router.post('/', async (req, res) => {
                 if (gl_jns_cr_1 == "2") {
                     try {
                         await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
                                 replacements: [amount, amount, gl_rek_cr_1,bank_tujuan]
                             }
@@ -795,7 +795,7 @@ router.post('/', async (req, res) => {
                 if (trans_fee > 0) {
                     try {
                         await db.sequelize.query(
-                            "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                            "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
                                 replacements: [trans_fee, trans_fee, gl_rek_db_2,bank_tujuan]
                             }
@@ -806,7 +806,7 @@ router.post('/', async (req, res) => {
                     if (gl_jns_cr_2 == "2") {
                         try {
                             await db.sequelize.query(
-                                "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
+                                "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                                 {
                                     replacements: [trans_fee, trans_fee, gl_rek_cr_2,bank_tujuan]
                                 }
