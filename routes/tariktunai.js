@@ -1513,9 +1513,6 @@ router.post('/', async (req, res) => {
             }
 
 
-
-
-
         } else if (trx_type = "REV") {
 
 
