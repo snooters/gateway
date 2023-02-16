@@ -153,7 +153,7 @@ router.post('/', async (req, res) => {
                     }
                     break;
                 default:
-                    sts = "TIDAK AKTIF"
+                    sts = "REK SALAH"
             }
             value.push({
                 no_rek: no_rek,
