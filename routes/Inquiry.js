@@ -52,43 +52,104 @@ router.post('/', async (req, res) => {
         let no_rek1 = hasil.no_rek
         let nama_rek = hasil.nama
 
+        let sts
+        switch (stsrec) {
+            case "N":
+                sts = "TIDAK AKTIF"
+                break;
+            case "C":
+                sts = "TUTUP"
+                break;
+            case "T":
+                sts = "TUTUP"
+                break;
+            case "A":
+                if (stsblok == "R") {
+                    sts = "BLOKIR"
+                } else {
+                    sts = "AKTIF"
+                }
+                break;
+            default:
+                sts = "REK SALAH"
+        }
         // jika status rekening belum di otorisasi
         if (stsrec == "N") {
             return res.status(200).send({
-                code: rek_notauth,
-                status: "GAGAL",
-                message: "Rekening Belum Diotorisasi",
+                code: Successful,
+                status: "SUKSES",
+                message: "SUKSES",
                 rrn: rrn,
-                data: null
+                data: {
+                    bpr_id: bpr_id,
+                    trx_code: trx_code,
+                    trx_type: trx_type,
+                    tgl_trans: tgl_trans,
+                    tgl_transmis: tgl_transmis,
+                    rrn: rrn,
+                    no_rek: no_rek1,
+                    nama_rek: nama_rek,
+                    status_rek: sts
+                }
             });
             // jika status rekening tutup
         } else if (stsrec == "C") {
             return res.status(200).send({
-                code: rek_tutup,
-                status: "GAGAL",
-                message: "Rekening Tutup",
+                code: Successful,
+                status: "SUKSES",
+                message: "SUKSES",
                 rrn: rrn,
-                data: null
+                data: {
+                    bpr_id: bpr_id,
+                    trx_code: trx_code,
+                    trx_type: trx_type,
+                    tgl_trans: tgl_trans,
+                    tgl_transmis: tgl_transmis,
+                    rrn: rrn,
+                    no_rek: no_rek1,
+                    nama_rek: nama_rek,
+                    status_rek: sts
+                }
             });
             // jika status rekening tutup
         } else if (stsrec == "T") {
             return res.status(200).send({
-                code: rek_tutup,
-                status: "GAGAL",
-                message: "Rekening Tutup",
+                code: Successful,
+                status: "SUKSES",
+                message: "SUKSES",
                 rrn: rrn,
-                data: null
+                data: {
+                    bpr_id: bpr_id,
+                    trx_code: trx_code,
+                    trx_type: trx_type,
+                    tgl_trans: tgl_trans,
+                    tgl_transmis: tgl_transmis,
+                    rrn: rrn,
+                    no_rek: no_rek1,
+                    nama_rek: nama_rek,
+                    status_rek: sts
+                }
             });
             // jika status rekening aktif
         } else if (stsrec == "A") {
             // jika status rekening diblokir
             if (stsblok == "R") {
                 return res.status(200).send({
-                    code: rek_blokir,
-                    status: "GAGAL",
-                    message: "Rekening Rekening Diblokir",
+                    code: Successful,
+                    status: "SUKSES",
+                    message: "SUKSES",
                     rrn: rrn,
-                    data: null
+                    data: {
+                        bpr_id: bpr_id,
+                        trx_code: trx_code,
+                        trx_type: trx_type,
+                        tgl_trans: tgl_trans,
+                        tgl_transmis: tgl_transmis,
+                        rrn: rrn,
+                        no_rek: no_rek1,
+                        nama_rek: nama_rek,
+                        status_rek: sts
+                    }
                 });
             } else {
                 // jika status rekening tidak diblokir
@@ -106,7 +167,7 @@ router.post('/', async (req, res) => {
                         rrn: rrn,
                         no_rek: no_rek1,
                         nama_rek: nama_rek,
-                        status: "AKTIF"
+                        status_rek: sts
                     }
                 });
             }
@@ -160,7 +221,7 @@ router.post('/', async (req, res) => {
                 nama_rek: nama_rek,
                 saldoakhir: saldoakhir,
                 saldoeff: saldoeff,
-                status: sts
+                status_rek: sts
             })
         }
         // console.log(value)
