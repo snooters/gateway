@@ -38,14 +38,14 @@ router.post('/', async (req, res) => {
             .json(validate);
     }
 
-    let { bpr_id, trx_code, trx_type, tgl_trans, tgl_transmis, rrn, data,gl_jns,no_rek } = req.body;
+    let { bpr_id, trx_code, trx_type, tgl_trans, tgl_transmis, rrn, data, gl_jns, no_rek } = req.body;
 
     if (trx_code == Inquiry_Account) {
         let hasil
-        if(!no_rek){
-            hasil = await getnamaacc(data.no_rek,data.gl_jns,bpr_id)
-        }else{
-            hasil = await getnamaacc(no_rek,gl_jns,bpr_id)
+        if (!no_rek) {
+            hasil = await getnamaacc(data.no_rek, data.gl_jns, bpr_id)
+        } else {
+            hasil = await getnamaacc(no_rek, gl_jns, bpr_id)
         }
         let stsrec = hasil.stsrec
         let stsblok = hasil.stsblok
@@ -105,7 +105,8 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         rrn: rrn,
                         no_rek: no_rek1,
-                        nama_rek: nama_rek
+                        nama_rek: nama_rek,
+                        status: "AKTIF"
                     }
                 });
             }
@@ -125,19 +126,41 @@ router.post('/', async (req, res) => {
         var value = []
         let jsonstring
         for (i in data) {
-            let no_rek = data[i].no_rek    
-            let gl_jns = data[i].gl_jns        
-            let hasil = await getbalance(no_rek,gl_jns,bpr_id)
+            let no_rek = data[i].no_rek
+            let gl_jns = data[i].gl_jns
+            let hasil = await getbalance(no_rek, gl_jns, bpr_id)
             let stsrec = hasil.stsrec
             let stsblok = hasil.stsblok
             let nama_rek = hasil.nama
             let saldoakhir = hasil.saldoakhir
             let saldoeff = hasil.saldoeff
+            let sts
+            switch (stsrec) {
+                case "N":
+                    sts = "TIDAK AKTIF"
+                    break;
+                case "C":
+                    sts = "TUTUP"
+                    break;
+                case "T":
+                    sts = "TUTUP"
+                    break;
+                case "A":
+                    if (stsblok == "R") {
+                        sts = "BLOKIR"
+                    } else {
+                        sts = "AKTIF"
+                    }
+                    break;
+                default:
+                    sts = "TIDAK AKTIF"
+            }
             value.push({
                 no_rek: no_rek,
                 nama_rek: nama_rek,
                 saldoakhir: saldoakhir,
-                saldoeff: saldoeff
+                saldoeff: saldoeff,
+                status: sts
             })
         }
         // console.log(value)
@@ -162,7 +185,7 @@ router.post('/', async (req, res) => {
         return res.status(200).send({
             code: invelid_transaction,
             status: "GAGAL",
-            message:"TRX_CODE " + trx_code + " Tidak Terdaftar",
+            message: "TRX_CODE " + trx_code + " Tidak Terdaftar",
             rrn: rrn,
             data: null
         });
