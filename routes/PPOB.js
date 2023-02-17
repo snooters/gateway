@@ -82,21 +82,51 @@ router.post('/', async (req, res) => {
                     code: rek_notauth,
                     status: "GAGAL",
                     message: "Rekening Belum Diautorisasi",
-                    data: null
+                    rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "TIDAK ADA"
+                        }
                 })
             } else if (stsrec == "C") {
                 return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening Tutup",
-                    data: null
+                    rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "TUTUP"
+                        }
                 });
             } else if (stsrec == "T") {
                 return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening tutup",
-                    data: null
+                    rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "TUTUP"
+                        }
                 })
             } else if (stsrec == "A") {
 
@@ -105,7 +135,17 @@ router.post('/', async (req, res) => {
                         code: rek_blokir,
                         status: "GAGAL",
                         message: "Rekening Diblokir",
-                        data: null
+                        rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "BLOKIR"
+                        }
                     })
                 }
 
@@ -114,7 +154,17 @@ router.post('/', async (req, res) => {
                         code: saldo_kurang,
                         status: "GAGAL",
                         message: "Saldo Tidak Cukup",
-                        data: null
+                        rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "AKTIF"
+                        }
                     })
                 }
 
@@ -559,21 +609,51 @@ router.post('/', async (req, res) => {
                     code: rek_notauth,
                     status: "GAGAL",
                     message: "Rekening Belum Diautorisasi",
-                    data: null
+                    rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "TIDAK AKTIF"
+                        }
                 })
             } else if (stsrec == "C") {
                 return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening Tutup",
-                    data: null
+                    rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "TUTUP"
+                        }
                 });
             } else if (stsrec == "T") {
                 return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
                     message: "Rekening tutup",
-                    data: null
+                    rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "TUTUP"
+                        }
                 })
             } else if (stsrec == "A") {
 
@@ -582,7 +662,17 @@ router.post('/', async (req, res) => {
                         code: rek_blokir,
                         status: "GAGAL",
                         message: "Rekening Diblokir",
-                        data: null
+                        rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            no_rek: no_rek,
+                            nama_rek: nama_rekdr,
+                            status_rek: "BLOKIR"
+                        }
                     })
                 }
 
@@ -1009,6 +1099,7 @@ router.post('/', async (req, res) => {
                     code: rek_tidakada,
                     status: "GAGAL",
                     message: "Rekening Tidak Ada",
+                    rrn:rrn,
                     data: null
                 })
             }
@@ -1018,6 +1109,7 @@ router.post('/', async (req, res) => {
                 code: invelid_transaction,
                 status: "GAGAL",
                 message: "TRX_TYPE Salah",
+                rrn:rrn,
                 data: null
             })
         }
@@ -1028,6 +1120,7 @@ router.post('/', async (req, res) => {
             code: invelid_transaction,
             status: "GAGAL",
             message: "TRX CODE " + trx_code + " TIDAK TERDAFTAR",
+            rrn:rrn,
             data: null
         })
     }
