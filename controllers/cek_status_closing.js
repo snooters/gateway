@@ -6,6 +6,7 @@ const db = require("../connection/index");
 let hasil
 
 async function cekclosing() {
+
     try {
         let closing = await db.sequelize.query(
             "select status_closing from sts_closing",

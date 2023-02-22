@@ -8,6 +8,7 @@ const { cekclosing } = require('../controllers/cek_status_closing');
 const { getnotrn } = require('../controllers/getnotrn');
 const { gettanggal } = require('../controllers/get_tgltrn');
 const { gettrnke } = require('../controllers/gettrnketab');
+const { tahan } = require('../controllers/tahan');
 const v = new Validator();
 
 const {
@@ -59,6 +60,7 @@ router.post('/', async (req, res) => {
         gl_jns_cr_2, gl_amount_cr_2 } = data
 
     if (trx_code == PPOB) {
+
         if (trx_type == "TRX") {
             if (await cekclosing() == "C") {
                 return res.status(200).send({
@@ -550,25 +552,25 @@ router.post('/', async (req, res) => {
                     }
                 }
 
-                return res.status(200).send({
-                    code: "000",
-                    status: "SUKSES",
-                    message: "SUKSES",
-                    rrn: rrn,
-                    data: {
-                        bpr_id: bpr_id,
-                        trx_code: trx_code,
-                        trx_type: trx_type,
-                        no_hp: no_hp,
-                        no_rek: no_rek,
-                        nama: nama_rekdr,
-                        amount: amount,
-                        trans_fee: trans_fee,
-                        tgl_trans: tgl_trans,
-                        tgl_transmis: tgl_transmis,
-                        noreff: rrn + tgltrn
-                    }
-                })
+                // return res.status(200).send({
+                //     code: "000",
+                //     status: "SUKSES",
+                //     message: "SUKSES",
+                //     rrn: rrn,
+                //     data: {
+                //         bpr_id: bpr_id,
+                //         trx_code: trx_code,
+                //         trx_type: trx_type,
+                //         no_hp: no_hp,
+                //         no_rek: no_rek,
+                //         nama: nama_rekdr,
+                //         amount: amount,
+                //         trans_fee: trans_fee,
+                //         tgl_trans: tgl_trans,
+                //         tgl_transmis: tgl_transmis,
+                //         noreff: rrn + tgltrn
+                //     }
+                // })
 
 
             } else {
