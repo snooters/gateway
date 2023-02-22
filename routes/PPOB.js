@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
                 })
             }
 
-            let balance = await getbalance(gl_rek_db_1, gl_jns_db_1,bpr_id)
+            let balance = await getbalance(gl_rek_db_1, gl_jns_db_1, bpr_id)
             let nama_rekdr = balance.nama
             let stsrec = balance.stsrec
             let stsblok = balance.stsblok
@@ -83,16 +83,16 @@ router.post('/', async (req, res) => {
                     status: "GAGAL",
                     message: "Rekening Belum Diautorisasi",
                     rrn: rrn,
-                        data: {
-                            bpr_id: bpr_id,
-                            trx_code: trx_code,
-                            trx_type: trx_type,
-                            tgl_trans: tgl_trans,
-                            tgl_transmis: tgl_transmis,
-                            no_rek: no_rek,
-                            nama_rek: nama_rekdr,
-                            status_rek: "TIDAK ADA"
-                        }
+                    data: {
+                        bpr_id: bpr_id,
+                        trx_code: trx_code,
+                        trx_type: trx_type,
+                        tgl_trans: tgl_trans,
+                        tgl_transmis: tgl_transmis,
+                        no_rek: no_rek,
+                        nama_rek: nama_rekdr,
+                        status_rek: "TIDAK ADA"
+                    }
                 })
             } else if (stsrec == "C") {
                 return res.status(200).send({
@@ -100,16 +100,16 @@ router.post('/', async (req, res) => {
                     status: "GAGAL",
                     message: "Rekening Tutup",
                     rrn: rrn,
-                        data: {
-                            bpr_id: bpr_id,
-                            trx_code: trx_code,
-                            trx_type: trx_type,
-                            tgl_trans: tgl_trans,
-                            tgl_transmis: tgl_transmis,
-                            no_rek: no_rek,
-                            nama_rek: nama_rekdr,
-                            status_rek: "TUTUP"
-                        }
+                    data: {
+                        bpr_id: bpr_id,
+                        trx_code: trx_code,
+                        trx_type: trx_type,
+                        tgl_trans: tgl_trans,
+                        tgl_transmis: tgl_transmis,
+                        no_rek: no_rek,
+                        nama_rek: nama_rekdr,
+                        status_rek: "TUTUP"
+                    }
                 });
             } else if (stsrec == "T") {
                 return res.status(200).send({
@@ -117,16 +117,16 @@ router.post('/', async (req, res) => {
                     status: "GAGAL",
                     message: "Rekening tutup",
                     rrn: rrn,
-                        data: {
-                            bpr_id: bpr_id,
-                            trx_code: trx_code,
-                            trx_type: trx_type,
-                            tgl_trans: tgl_trans,
-                            tgl_transmis: tgl_transmis,
-                            no_rek: no_rek,
-                            nama_rek: nama_rekdr,
-                            status_rek: "TUTUP"
-                        }
+                    data: {
+                        bpr_id: bpr_id,
+                        trx_code: trx_code,
+                        trx_type: trx_type,
+                        tgl_trans: tgl_trans,
+                        tgl_transmis: tgl_transmis,
+                        no_rek: no_rek,
+                        nama_rek: nama_rekdr,
+                        status_rek: "TUTUP"
+                    }
                 })
             } else if (stsrec == "A") {
 
@@ -173,7 +173,7 @@ router.post('/', async (req, res) => {
                     await db.sequelize.query(
                         "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                         {
-                            replacements: [amount, amount, gl_rek_db_1,bpr_id]
+                            replacements: [amount, amount, gl_rek_db_1, bpr_id]
                         }
                     )
                 } catch (e) {
@@ -183,7 +183,7 @@ router.post('/', async (req, res) => {
                         await db.sequelize.query(
                             "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
-                                replacements: [amount, amount, gl_rek_cr_1,bpr_id]
+                                replacements: [amount, amount, gl_rek_cr_1, bpr_id]
                             }
                         )
                     } catch (e) {
@@ -236,19 +236,19 @@ router.post('/', async (req, res) => {
                 let sbbperalihan_cr
                 let trnke_cr
 
-                nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1,bpr_id)
+                nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1, bpr_id)
                 namadr = nama_tem.nama
                 sbbperalihan_dr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
                 trnke_dr = nama_tem.trnke
 
                 if (gl_jns_cr_1 == "1") {
-                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1,bpr_id)
+                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1, bpr_id)
                     namacr = nama_tem.nama
                     sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_cr = 0
                     cracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + cracc
                 } else {
-                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1,bpr_id)
+                    nama_tem = await getbalance(gl_rek_cr_1, gl_jns_cr_1, bpr_id)
                     namacr = nama_tem.nama
                     sbbperalihan_cr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_cr = nama_tem.trnke
@@ -365,7 +365,7 @@ router.post('/', async (req, res) => {
                         await db.sequelize.query(
                             "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
-                                replacements: [trans_fee, trans_fee, gl_rek_db_2,bpr_id]
+                                replacements: [trans_fee, trans_fee, gl_rek_db_2, bpr_id]
                             }
                         )
                     } catch (e) {
@@ -376,7 +376,7 @@ router.post('/', async (req, res) => {
                             await db.sequelize.query(
                                 "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                                 {
-                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2,bpr_id]
+                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2, bpr_id]
                                 }
                             )
                         } catch (e) {
@@ -425,18 +425,18 @@ router.post('/', async (req, res) => {
                     depfrom = ""
                     depto = ""
                     dokumen = rrn + tgltrn
-                    nama_tem = await getbalance(gl_rek_db_2, gl_jns_db_2,bpr_id)
+                    nama_tem = await getbalance(gl_rek_db_2, gl_jns_db_2, bpr_id)
                     namadr = nama_tem.nama
                     sbbperalihan_dr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_dr = nama_tem.trnke
 
                     if (gl_jns_cr_2 == "2") {
-                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2,bpr_id)
+                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2, bpr_id)
                         namacr = nama_tem.nama
                         sbbperalihan_cr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
                         trnke_cr = nama_tem.trnke
                     } else {
-                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2,bpr_id)
+                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2, bpr_id)
                         namacr = nama_tem.nama
                         sbbperalihan_cr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + cracc
                         cracc = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + cracc
@@ -596,7 +596,7 @@ router.post('/', async (req, res) => {
                 })
             }
 
-            let balance = await getbalance(gl_rek_db_1, gl_jns_db_1,bpr_id)
+            let balance = await getbalance(gl_rek_db_1, gl_jns_db_1, bpr_id)
             let nama_rekdr = balance.nama
             let stsrec = balance.stsrec
             let stsblok = balance.stsblok
@@ -610,16 +610,16 @@ router.post('/', async (req, res) => {
                     status: "GAGAL",
                     message: "Rekening Belum Diautorisasi",
                     rrn: rrn,
-                        data: {
-                            bpr_id: bpr_id,
-                            trx_code: trx_code,
-                            trx_type: trx_type,
-                            tgl_trans: tgl_trans,
-                            tgl_transmis: tgl_transmis,
-                            no_rek: no_rek,
-                            nama_rek: nama_rekdr,
-                            status_rek: "TIDAK AKTIF"
-                        }
+                    data: {
+                        bpr_id: bpr_id,
+                        trx_code: trx_code,
+                        trx_type: trx_type,
+                        tgl_trans: tgl_trans,
+                        tgl_transmis: tgl_transmis,
+                        no_rek: no_rek,
+                        nama_rek: nama_rekdr,
+                        status_rek: "TIDAK AKTIF"
+                    }
                 })
             } else if (stsrec == "C") {
                 return res.status(200).send({
@@ -627,16 +627,16 @@ router.post('/', async (req, res) => {
                     status: "GAGAL",
                     message: "Rekening Tutup",
                     rrn: rrn,
-                        data: {
-                            bpr_id: bpr_id,
-                            trx_code: trx_code,
-                            trx_type: trx_type,
-                            tgl_trans: tgl_trans,
-                            tgl_transmis: tgl_transmis,
-                            no_rek: no_rek,
-                            nama_rek: nama_rekdr,
-                            status_rek: "TUTUP"
-                        }
+                    data: {
+                        bpr_id: bpr_id,
+                        trx_code: trx_code,
+                        trx_type: trx_type,
+                        tgl_trans: tgl_trans,
+                        tgl_transmis: tgl_transmis,
+                        no_rek: no_rek,
+                        nama_rek: nama_rekdr,
+                        status_rek: "TUTUP"
+                    }
                 });
             } else if (stsrec == "T") {
                 return res.status(200).send({
@@ -644,16 +644,16 @@ router.post('/', async (req, res) => {
                     status: "GAGAL",
                     message: "Rekening tutup",
                     rrn: rrn,
-                        data: {
-                            bpr_id: bpr_id,
-                            trx_code: trx_code,
-                            trx_type: trx_type,
-                            tgl_trans: tgl_trans,
-                            tgl_transmis: tgl_transmis,
-                            no_rek: no_rek,
-                            nama_rek: nama_rekdr,
-                            status_rek: "TUTUP"
-                        }
+                    data: {
+                        bpr_id: bpr_id,
+                        trx_code: trx_code,
+                        trx_type: trx_type,
+                        tgl_trans: tgl_trans,
+                        tgl_transmis: tgl_transmis,
+                        no_rek: no_rek,
+                        nama_rek: nama_rekdr,
+                        status_rek: "TUTUP"
+                    }
                 })
             } else if (stsrec == "A") {
 
@@ -690,7 +690,7 @@ router.post('/', async (req, res) => {
                     await db.sequelize.query(
                         "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                         {
-                            replacements: [amount, amount, gl_rek_db_1,bpr_id]
+                            replacements: [amount, amount, gl_rek_db_1, bpr_id]
                         }
                     )
                 } catch (e) {
@@ -700,7 +700,7 @@ router.post('/', async (req, res) => {
                         await db.sequelize.query(
                             "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
-                                replacements: [amount, amount, gl_rek_cr_1,bpr_id]
+                                replacements: [amount, amount, gl_rek_cr_1, bpr_id]
                             }
                         )
                     } catch (e) {
@@ -755,19 +755,19 @@ router.post('/', async (req, res) => {
                 let trnke_dr
 
                 if (gl_jns_cr_1 == "1") {
-                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1,bpr_id)
+                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1, bpr_id)
                     namadr = nama_tem.nama
                     sbbperalihan_dr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
                     trnke_dr = nama_tem.trnke
                     dracc = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + gl_rek_cr_1
                 } else {
-                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1,bpr_id)
+                    nama_tem = await getnamaacc(gl_rek_cr_1, gl_jns_cr_1, bpr_id)
                     namadr = nama_tem.nama
                     sbbperalihan_dr = gl_rek_cr_1.substr(0, 3) + gl_rek_cr_1.substr(3, 2) + gl_rek_cr_1.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_dr = nama_tem.trnke
                 }
 
-                nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1,bpr_id)
+                nama_tem = await getbalance(gl_rek_db_1, gl_jns_db_1, bpr_id)
                 namacr = nama_tem.nama
                 sbbperalihan_cr = gl_rek_db_1.substr(0, 3) + gl_rek_db_1.substr(3, 2) + gl_rek_db_1.substr(5, 2) + "10" + nama_tem.sbbtab
                 trnke_cr = nama_tem.trnke
@@ -885,7 +885,7 @@ router.post('/', async (req, res) => {
                         await db.sequelize.query(
                             "update m_tabunganc set saldoakhir= saldoakhir - ?, mutasidr= mutasidr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                             {
-                                replacements: [trans_fee, trans_fee, gl_rek_db_2,bpr_id]
+                                replacements: [trans_fee, trans_fee, gl_rek_db_2, bpr_id]
                             }
                         )
                     } catch (e) {
@@ -896,7 +896,7 @@ router.post('/', async (req, res) => {
                             await db.sequelize.query(
                                 "update m_tabunganc set saldoakhir= saldoakhir + ?, mutasicr= mutasicr + ?, trnke= trnke + 1 where noacc =? and nocif=?",
                                 {
-                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2,bpr_id]
+                                    replacements: [trans_fee, trans_fee, gl_rek_cr_2, bpr_id]
                                 }
                             )
                         } catch (e) {
@@ -950,19 +950,19 @@ router.post('/', async (req, res) => {
                     let sbbperalihan_dr
                     let trnke_dr
                     if (gl_jns_cr_2 == "2") {
-                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2,bpr_id)
+                        nama_tem = await getbalance(gl_rek_cr_2, gl_jns_cr_2, bpr_id)
                         namadr = nama_tem.nama
                         sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + nama_tem.sbbtab
                         trnke_dr = nama_tem.trnke
                     } else {
-                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2,bpr_id)
+                        nama_tem = await getnamaacc(gl_rek_cr_2, gl_jns_cr_2, bpr_id)
                         namadr = nama_tem.nama
                         sbbperalihan_dr = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + dracc
                         trnke_dr = "0"
                         dracc = gl_rek_cr_2.substr(0, 3) + gl_rek_cr_2.substr(3, 2) + gl_rek_cr_2.substr(5, 2) + "10" + dracc
 
                     }
-                    nama_tem = await getbalance(gl_rek_db_2, gl_jns_db_2,bpr_id)
+                    nama_tem = await getbalance(gl_rek_db_2, gl_jns_db_2, bpr_id)
                     namacr = nama_tem.nama
                     sbbperalihan_cr = gl_rek_db_2.substr(0, 3) + gl_rek_db_2.substr(3, 2) + gl_rek_db_2.substr(5, 2) + "10" + nama_tem.sbbtab
                     trnke_cr = nama_tem.trnke
@@ -1099,7 +1099,7 @@ router.post('/', async (req, res) => {
                     code: rek_tidakada,
                     status: "GAGAL",
                     message: "Rekening Tidak Ada",
-                    rrn:rrn,
+                    rrn: rrn,
                     data: null
                 })
             }
@@ -1109,7 +1109,7 @@ router.post('/', async (req, res) => {
                 code: invelid_transaction,
                 status: "GAGAL",
                 message: "TRX_TYPE Salah",
-                rrn:rrn,
+                rrn: rrn,
                 data: null
             })
         }
@@ -1120,7 +1120,7 @@ router.post('/', async (req, res) => {
             code: invelid_transaction,
             status: "GAGAL",
             message: "TRX CODE " + trx_code + " TIDAK TERDAFTAR",
-            rrn:rrn,
+            rrn: rrn,
             data: null
         })
     }
