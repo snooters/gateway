@@ -93,7 +93,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TIDAK AKTIF"
+                        status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
             } else if (stsrec == "C") {
@@ -110,7 +110,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 });
             } else if (stsrec == "T") {
@@ -127,7 +127,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 })
             } else if (stsrec == "A") {
@@ -146,7 +146,7 @@ router.post('/', async (req, res) => {
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
                             nama_rek: nama_rekdr,
-                            status_rek: "BLOKIR"
+                            status_rek: "REKENING DIBLOKIR"
                         }
                     })
                 }
@@ -611,7 +611,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TIDAK AKTIF"
+                        status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
             } else if (stsrec == "C") {
@@ -628,7 +628,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 });
             } else if (stsrec == "T") {
@@ -645,7 +645,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 })
             } else if (stsrec == "A") {
@@ -664,7 +664,7 @@ router.post('/', async (req, res) => {
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
                             nama_rek: nama_rekdr,
-                            status_rek: "BLOKIR"
+                            status_rek: "REKENING DIBLOKIR"
                         }
                     })
                 }
@@ -1139,7 +1139,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TIDAK AKTIF"
+                        status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
             } else if (stsrec == "C") {
@@ -1156,7 +1156,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 });
             } else if (stsrec == "T") {
@@ -1173,7 +1173,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 })
             } else if (stsrec == "A") {
@@ -1192,7 +1192,7 @@ router.post('/', async (req, res) => {
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
                             nama_rek: nama_rekdr,
-                            status_rek: "BLOKIR"
+                            status_rek: "REKENING DIBLOKIR"
                         }
                     })
                 }
@@ -1667,7 +1667,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TIDAK AKTIF"
+                        status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
             } else if (stsrec == "C") {
@@ -1684,7 +1684,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 });
             } else if (stsrec == "T") {
@@ -1701,7 +1701,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 })
             } else if (stsrec == "A") {
@@ -1720,7 +1720,7 @@ router.post('/', async (req, res) => {
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
                             nama_rek: nama_rekdr,
-                            status_rek: "BLOKIR"
+                            status_rek: "REKEING DIBLOKIR"
                         }
                     })
                 }
@@ -2205,7 +2205,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TIDAK AKTIF"
+                        status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
             } else if (stsrec == "C") {
@@ -2222,7 +2222,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 });
             } else if (stsrec == "T") {
@@ -2239,7 +2239,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 })
             } else if (stsrec == "A") {
@@ -2258,7 +2258,7 @@ router.post('/', async (req, res) => {
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
                             nama_rek: nama_rekdr,
-                            status_rek: "BLOKIR"
+                            status_rek: "REKENING DIBLOKIR"
                         }
                     })
                 }
@@ -2733,7 +2733,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TIDAK AKTIF"
+                        status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
             } else if (stsrec == "C") {
@@ -2750,7 +2750,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 });
             } else if (stsrec == "T") {
@@ -2767,7 +2767,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 })
             } else if (stsrec == "A") {
@@ -2786,7 +2786,7 @@ router.post('/', async (req, res) => {
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
                             nama_rek: nama_rekdr,
-                            status_rek: "BLOKIR"
+                            status_rek: "REKENING DIBLOKIR"
                         }
                     })
                 }
