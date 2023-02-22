@@ -55,17 +55,17 @@ router.post('/', async (req, res) => {
         let sts
         switch (stsrec) {
             case "N":
-                sts = "TIDAK AKTIF"
+                sts = "REKENING TIDAK AKTIF"
                 break;
             case "C":
-                sts = "TUTUP"
+                sts = "REKENING TUTUP"
                 break;
             case "T":
-                sts = "TUTUP"
+                sts = "REKENING TUTUP"
                 break;
             case "A":
                 if (stsblok == "R") {
-                    sts = "BLOKIR"
+                    sts = "REKENING DIBLOKIR"
                 } else {
                     sts = "AKTIF"
                 }
@@ -198,23 +198,23 @@ router.post('/', async (req, res) => {
             let sts
             switch (stsrec) {
                 case "N":
-                    sts = "TIDAK AKTIF"
+                    sts = "REKENING TIDAK AKTIF"
                     break;
                 case "C":
-                    sts = "TUTUP"
+                    sts = "REKENING TUTUP"
                     break;
                 case "T":
-                    sts = "TUTUP"
+                    sts = "REKENING TUTUP"
                     break;
                 case "A":
                     if (stsblok == "R") {
-                        sts = "BLOKIR"
+                        sts = "REKENING DIBLOKIR"
                     } else {
                         sts = "AKTIF"
                     }
                     break;
                 default:
-                    sts = "REK SALAH"
+                    sts = "REKENING SALAH"
             }
             value.push({
                 no_rek: no_rek,

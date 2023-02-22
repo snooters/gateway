@@ -95,14 +95,14 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TIDAK ADA"
+                        status_rek: "REKENING TIDAK ADA"
                     }
                 })
             } else if (stsrec == "C") {
                 return res.status(200).send({
                     code: rek_tutup,
                     status: "GAGAL",
-                    message: "Rekening Tutup",
+                    message: "REKENING TUTUP",
                     rrn: rrn,
                     data: {
                         bpr_id: bpr_id,
@@ -112,7 +112,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 });
             } else if (stsrec == "T") {
@@ -129,7 +129,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
                         nama_rek: nama_rekdr,
-                        status_rek: "TUTUP"
+                        status_rek: "REKENING TUTUP"
                     }
                 })
             } else if (stsrec == "A") {
@@ -148,7 +148,7 @@ router.post('/', async (req, res) => {
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
                             nama_rek: nama_rekdr,
-                            status_rek: "BLOKIR"
+                            status_rek: "REKENING DIBLOKIR"
                         }
                     })
                 }
