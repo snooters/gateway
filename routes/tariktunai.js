@@ -553,26 +553,50 @@ router.post('/', async (req, res) => {
                         }
                     }
                 }
+                if (req.body.bpr_id !== "600998") {
+                    return res.status(200).send({
+                        code: "000",
+                        status: "SUKSES",
+                        message: "SUKSES",
+                        rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            no_hp: no_hp,
+                            no_rek: no_rek,
+                            nama: nama_rekdr,
+                            amount: amount,
+                            trans_fee: trans_fee,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            noreff: rrn + tgltrn
+                        }
+                    })
 
-                return res.status(200).send({
-                    code: "000",
-                    status: "SUKSES",
-                    message: "SUKSES",
-                    rrn: rrn,
-                    data: {
-                        bpr_id: bpr_id,
-                        trx_code: trx_code,
-                        trx_type: trx_type,
-                        no_hp: no_hp,
-                        no_rek: no_rek,
-                        nama: nama_rekdr,
-                        amount: amount,
-                        trans_fee: trans_fee,
-                        tgl_trans: tgl_trans,
-                        tgl_transmis: tgl_transmis,
-                        noreff: rrn + tgltrn
+                } else {
+                    if (trx_type == "REV") {
+                        return res.status(200).send({
+                            code: "000",
+                            status: "SUKSES",
+                            message: "SUKSES",
+                            rrn: rrn,
+                            data: {
+                                bpr_id: bpr_id,
+                                trx_code: trx_code,
+                                trx_type: trx_type,
+                                no_hp: no_hp,
+                                no_rek: no_rek,
+                                nama: nama_rekdr,
+                                amount: amount,
+                                trans_fee: trans_fee,
+                                tgl_trans: tgl_trans,
+                                tgl_transmis: tgl_transmis,
+                                noreff: rrn + tgltrn
+                            }
+                        })
                     }
-                })
+                }
 
 
             } else {
@@ -1625,26 +1649,51 @@ router.post('/', async (req, res) => {
                     }
                 }
 
-                return res.status(200).send({
-                    code: "000",
-                    status: "SUKSES",
-                    message: "SUKSES",
-                    rrn: rrn,
-                    data: {
-                        bpr_id: bpr_id,
-                        trx_code: trx_code,
-                        trx_type: trx_type,
-                        no_hp: no_hp,
-                        no_rek: no_rek,
-                        nama: nama_rekdr,
-                        amount: amount,
-                        trans_fee: trans_fee,
-                        tgl_trans: tgl_trans,
-                        tgl_transmis: tgl_transmis,
-                        noreff: rrn + tgltrn
-                    }
-                })
+                if (req.body.bpr_id !== "600001") {
 
+                    return res.status(200).send({
+                        code: "000",
+                        status: "SUKSES",
+                        message: "SUKSES",
+                        rrn: rrn,
+                        data: {
+                            bpr_id: bpr_id,
+                            trx_code: trx_code,
+                            trx_type: trx_type,
+                            no_hp: no_hp,
+                            no_rek: no_rek,
+                            nama: nama_rekdr,
+                            amount: amount,
+                            trans_fee: trans_fee,
+                            tgl_trans: tgl_trans,
+                            tgl_transmis: tgl_transmis,
+                            noreff: rrn + tgltrn
+                        }
+                    })
+
+                } else {
+                    if (trx_type == "REV") {
+                        return res.status(200).send({
+                            code: "000",
+                            status: "SUKSES",
+                            message: "SUKSES",
+                            rrn: rrn,
+                            data: {
+                                bpr_id: bpr_id,
+                                trx_code: trx_code,
+                                trx_type: trx_type,
+                                no_hp: no_hp,
+                                no_rek: no_rek,
+                                nama: nama_rekdr,
+                                amount: amount,
+                                trans_fee: trans_fee,
+                                tgl_trans: tgl_trans,
+                                tgl_transmis: tgl_transmis,
+                                noreff: rrn + tgltrn
+                            }
+                        })
+                    }
+                }
 
             } else {
                 return res.status(200).send({
