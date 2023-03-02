@@ -92,7 +92,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
@@ -109,7 +109,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 });
@@ -126,7 +126,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 })
@@ -145,7 +145,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "REKENING DIBLOKIR"
                         }
                     })
@@ -632,7 +632,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
@@ -649,7 +649,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 });
@@ -666,7 +666,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 })
@@ -685,7 +685,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "REKENING DIBLOKIR"
                         }
                     })
@@ -1160,7 +1160,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
@@ -1177,7 +1177,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 });
@@ -1194,7 +1194,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 })
@@ -1213,7 +1213,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "REKENING DIBLOKIR"
                         }
                     })
@@ -1232,7 +1232,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "AKTIF"
                         }
                     })
@@ -1712,7 +1712,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
@@ -1729,7 +1729,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 });
@@ -1746,7 +1746,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 })
@@ -1765,7 +1765,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "REKEING DIBLOKIR"
                         }
                     })
@@ -2250,7 +2250,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
@@ -2267,7 +2267,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 });
@@ -2284,7 +2284,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 })
@@ -2303,7 +2303,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "REKENING DIBLOKIR"
                         }
                     })
@@ -2322,7 +2322,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "AKTIF"
                         }
                     })
@@ -2778,7 +2778,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TIDAK AKTIF"
                     }
                 })
@@ -2795,7 +2795,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 });
@@ -2812,7 +2812,7 @@ router.post('/', async (req, res) => {
                         tgl_trans: tgl_trans,
                         tgl_transmis: tgl_transmis,
                         no_rek: no_rek,
-                        nama_rek: nama_rekdr,
+                        nama: nama_rekdr,
                         status_rek: "REKENING TUTUP"
                     }
                 })
@@ -2831,7 +2831,7 @@ router.post('/', async (req, res) => {
                             tgl_trans: tgl_trans,
                             tgl_transmis: tgl_transmis,
                             no_rek: no_rek,
-                            nama_rek: nama_rekdr,
+                            nama: nama_rekdr,
                             status_rek: "REKENING DIBLOKIR"
                         }
                     })

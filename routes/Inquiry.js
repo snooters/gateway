@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
         let stsrec = hasil.stsrec
         let stsblok = hasil.stsblok
         let no_rek1 = hasil.no_rek
-        let nama_rek = hasil.nama
+        let nama = hasil.nama
 
         let sts
         switch (stsrec) {
@@ -88,7 +88,7 @@ router.post('/', async (req, res) => {
                     tgl_transmis: tgl_transmis,
                     rrn: rrn,
                     no_rek: no_rek1,
-                    nama_rek: nama_rek,
+                    nama: nama,
                     status_rek: sts
                 }
             });
@@ -107,7 +107,7 @@ router.post('/', async (req, res) => {
                     tgl_transmis: tgl_transmis,
                     rrn: rrn,
                     no_rek: no_rek1,
-                    nama_rek: nama_rek,
+                    nama: nama,
                     status_rek: sts
                 }
             });
@@ -126,7 +126,7 @@ router.post('/', async (req, res) => {
                     tgl_transmis: tgl_transmis,
                     rrn: rrn,
                     no_rek: no_rek1,
-                    nama_rek: nama_rek,
+                    nama: nama,
                     status_rek: sts
                 }
             });
@@ -147,7 +147,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         rrn: rrn,
                         no_rek: no_rek1,
-                        nama_rek: nama_rek,
+                        nama: nama,
                         status_rek: sts
                     }
                 });
@@ -166,7 +166,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         rrn: rrn,
                         no_rek: no_rek1,
-                        nama_rek: nama_rek,
+                        nama: nama,
                         status_rek: sts
                     }
                 });
@@ -192,7 +192,7 @@ router.post('/', async (req, res) => {
             let hasil = await getbalance(no_rek, gl_jns, bpr_id)
             let stsrec = hasil.stsrec
             let stsblok = hasil.stsblok
-            let nama_rek = hasil.nama
+            let nama = hasil.nama
             let saldoakhir = hasil.saldoakhir
             let saldoeff = hasil.saldoeff
             let sts
@@ -218,7 +218,7 @@ router.post('/', async (req, res) => {
             }
             value.push({
                 no_rek: no_rek,
-                nama_rek: nama_rek,
+                nama: nama,
                 saldoakhir: saldoakhir,
                 saldoeff: saldoeff,
                 status_rek: sts
