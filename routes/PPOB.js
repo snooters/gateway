@@ -571,6 +571,8 @@ router.post('/', async (req, res) => {
                             noreff: rrn + tgltrn
                         }
                     })
+                } else {
+                    console.log("hold on")
                 }
 
             } else {
