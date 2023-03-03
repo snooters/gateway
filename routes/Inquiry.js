@@ -166,7 +166,7 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         rrn: rrn,
                         no_rek: no_rek1,
-                        nama: nama,
+                        nama_rek: nama,
                         status_rek: sts
                     }]
                 });
