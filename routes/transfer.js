@@ -541,7 +541,7 @@ router.post('/', async (req, res) => {
                         }
                     }
                 }
-                if (req.body.bpr_id !== "600998") {
+                if (req.body.bank_tujuan !== "600998") {
                     return res.status(200).send({
                         code: "000",
                         status: "SUKSES",
