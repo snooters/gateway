@@ -158,7 +158,7 @@ router.post('/', async (req, res) => {
                     status: "SUKSES",
                     message: "SUKSES",
                     rrn: rrn,
-                    data: [{
+                    data: {
                         bpr_id: bpr_id,
                         trx_code: trx_code,
                         trx_type: trx_type,
@@ -166,9 +166,9 @@ router.post('/', async (req, res) => {
                         tgl_transmis: tgl_transmis,
                         rrn: rrn,
                         no_rek: no_rek1,
-                        nama_rek: nama,
+                        nama: nama,
                         status_rek: sts
-                    }]
+                    }
                 });
             }
 
